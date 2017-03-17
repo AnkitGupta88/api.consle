@@ -1,14 +1,15 @@
-package com.global.service;
+package com.global.console.service;
 
 import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.global.dto.User;
-import com.global.dto.WebServiceRequests;
+import com.global.console.dto.ServiceRegister;
+import com.global.console.model.User;
+import com.global.console.model.WebServiceRequests;
+import com.global.console.response.Result;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface AdminService.
  */
@@ -59,6 +60,14 @@ public interface AdminService {
 	 * @return the JSON object
 	 */
 	public JSONObject addService(String inputParams);
+	
+	/**
+	 * Register service.
+	 *
+	 * @param service the service
+	 * @return the result
+	 */
+	public Result registerService(ServiceRegister service);
 	
 	/**
 	 * View requests.

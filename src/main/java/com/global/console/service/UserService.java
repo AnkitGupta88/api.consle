@@ -1,12 +1,11 @@
-package com.global.service;
+package com.global.console.service;
 
 import java.util.UUID;
 
 import org.json.simple.JSONArray;
 
-import com.global.dto.User;
+import com.global.console.model.User;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface UserService.
  */

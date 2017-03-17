@@ -1,4 +1,4 @@
-package com.global.dto;
+package com.global.console.model;
 
 import java.util.UUID;
 

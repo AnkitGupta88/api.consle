@@ -1,4 +1,4 @@
-package com.global.service.impl;
+package com.global.console.service.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.datastax.driver.core.utils.UUIDs;
-import com.global.dto.User;
-import com.global.dto.WebServiceRequests;
-import com.global.repository.RequestRepository;
-import com.global.repository.UserRepository;
-import com.global.service.UserService;
+import com.global.console.model.User;
+import com.global.console.model.WebServiceRequests;
+import com.global.console.repository.RequestRepository;
+import com.global.console.repository.UserRepository;
+import com.global.console.service.UserService;
 
 /**
  * The Class UserServiceImpl.
@@ -27,11 +27,11 @@ public class UserServiceImpl implements UserService {
 
 	/** The request repository. */
 	@Autowired
-	RequestRepository requestRepository;
+	private RequestRepository requestRepository;
 
 	/** The user repository. */
 	@Autowired
-	UserRepository userRepository;
+	private UserRepository userRepository;
 
 	@Override
 	public UUID requestAccess(String userId, String serviceName) {

@@ -1,12 +1,11 @@
-package com.global.repository;
+package com.global.console.repository;
 
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.global.dto.User;
+import com.global.console.model.User;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface UserRepository.
  */
@@ -28,9 +27,7 @@ public interface UserRepository extends CrudRepository<User, String>{
 	 */
 	public User findById(String id);
 
-	/* (non-Javadoc)
-	 * @see org.springframework.data.repository.CrudRepository#findAll()
-	 */
+	@Override
 	public List<User> findAll();
 
 }

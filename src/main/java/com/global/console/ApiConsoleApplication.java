@@ -1,4 +1,4 @@
-package com.global;
+package com.global.console;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,10 +8,10 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Metadata;
 
 @SpringBootApplication
-public class UrlAccessApplication {
+public class ApiConsoleApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(UrlAccessApplication.class, args);
+		SpringApplication.run(ApiConsoleApplication.class, args);
 	}
 
 	@Bean

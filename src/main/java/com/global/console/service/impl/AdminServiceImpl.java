@@ -1,4 +1,4 @@
-package com.global.service.impl;
+package com.global.console.service.impl;
 
 import java.io.IOException;
 import java.net.URI;
@@ -13,22 +13,26 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.global.dto.RateLimiting_Metrics;
-import com.global.dto.User;
-import com.global.dto.WebService;
-import com.global.dto.WebServiceRequests;
-import com.global.repository.RateLimitingMetricsRepository;
-import com.global.repository.RequestRepository;
-import com.global.repository.UserRepository;
-import com.global.service.AdminService;
+import com.global.console.configuration.ApiConfiguration;
+import com.global.console.dto.ServiceRegister;
+import com.global.console.model.RateLimiting_Metrics;
+import com.global.console.model.User;
+import com.global.console.model.WebService;
+import com.global.console.model.WebServiceRequests;
+import com.global.console.repository.RateLimitingMetricsRepository;
+import com.global.console.repository.RequestRepository;
+import com.global.console.repository.UserRepository;
+import com.global.console.response.Result;
+import com.global.console.service.AdminService;
+import com.global.console.utils.ServiceUrlBuilder;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class AdminServiceImpl.
  */
@@ -37,24 +41,24 @@ public class AdminServiceImpl implements AdminService {
 
 	/** The Constant KONGADMIN. */
 	private static final String KONGADMIN = "172.16.24.73:8001";
-	
+
 	/** The Constant KONGUSER. */
 	private static final String KONGUSER = "172.16.24.73:8000";
 
+	@Autowired
+	private ApiConfiguration apiConfig;
+
 	/** The repository. */
 	@Autowired
-	UserRepository repository;
+	private UserRepository repository;
 
 	/** The request repository. */
 	@Autowired
-	RequestRepository requestRepository;
-	
-	@Autowired
-	RateLimitingMetricsRepository rateLimitingRepository;
+	private RequestRepository requestRepository;
 
-	/* (non-Javadoc)
-	 * @see com.lakshayswani.service.AdminService#addUser(java.lang.String)
-	 */
+	@Autowired
+	private RateLimitingMetricsRepository rateLimitingRepository;
+
 	@Override
 	public String addUser(String userParams) {
 		User user = null;
@@ -82,9 +86,9 @@ public class AdminServiceImpl implements AdminService {
 				url = "http://" + KONGADMIN + "/consumers/" + user.getName() + "/key-auth";
 				response = postRequest(url, null, String.class);
 				json = (JSONObject) JSONValue.parse(response);
-				user.setKey((String)json.get("key"));
+				user.setKey((String) json.get("key"));
 				repository.save(user);
-				
+
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}
@@ -92,24 +96,18 @@ public class AdminServiceImpl implements AdminService {
 		return user.getId();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.lakshayswani.service.AdminService#viewAllUsers()
-	 */
 	@Override
 	public List<User> viewAllUsers() {
 		return repository.findAll();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.lakshayswani.service.AdminService#viewUser(java.lang.String)
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject viewUser(String id) {
 		JSONObject userDetails = new JSONObject();
 		userDetails.put("user", repository.findById(id));
 		String response = null;
-		String url = "http://" + KONGADMIN + "/plugins?consumer_id="+id;
+		String url = "http://" + KONGADMIN + "/plugins?consumer_id=" + id;
 		try {
 			response = getRequest(url, null, String.class);
 		} catch (URISyntaxException e) {
@@ -122,9 +120,6 @@ public class AdminServiceImpl implements AdminService {
 		return userDetails;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.lakshayswani.service.AdminService#viewServices()
-	 */
 	@Override
 	public JSONArray viewServices() {
 		String url = null;
@@ -140,9 +135,6 @@ public class AdminServiceImpl implements AdminService {
 		return data;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.lakshayswani.service.AdminService#addService(java.lang.String)
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject addService(String inputParams) {
@@ -180,7 +172,7 @@ public class AdminServiceImpl implements AdminService {
 			params.put("config.second", "0");
 			url = "http://" + KONGADMIN + "/apis/" + name + "/plugins/";
 			postRequest(url, params, String.class);
-			
+
 			params.clear();
 			params.put("name", "acl");
 			params.put("config.whitelist", name);
@@ -196,17 +188,11 @@ public class AdminServiceImpl implements AdminService {
 		return json;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.lakshayswani.service.AdminService#viewRequests()
-	 */
 	@Override
 	public List<WebServiceRequests> viewRequests() {
 		return requestRepository.findAll();
 	}
 
-	/* (non-Javadoc)
-	 * @see com.lakshayswani.service.AdminService#grantService(java.lang.String)
-	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public String grantService(String inputParams) {
@@ -222,7 +208,7 @@ public class AdminServiceImpl implements AdminService {
 			String configType = (inputs.get("configType") != null ? (String) inputs.get("configType") : "hour");
 			String permittedRequests = (inputs.get("permittedRequests") != null
 					? (String) inputs.get("permittedRequests") : "100");
-			
+
 			WebServiceRequests webServiceRequest = requestRepository.findById(id);
 			webServiceRequest.setStatus("completed");
 			requestRepository.save(webServiceRequest);
@@ -234,12 +220,12 @@ public class AdminServiceImpl implements AdminService {
 				params.put("config." + configType, permittedRequests);
 				url = "http://" + KONGADMIN + "/apis/" + webServiceRequest.getServiceName() + "/plugins/";
 				postRequest(url, params, String.class);
-				
+
 				params.clear();
 				params.put("group", webServiceRequest.getServiceName());
 				url = "http://" + KONGADMIN + "/consumers/" + webServiceRequest.getUserId() + "/acls/";
 				postRequest(url, params, String.class);
-				
+
 			} catch (URISyntaxException e) {
 				e.printStackTrace();
 			}
@@ -247,7 +233,8 @@ public class AdminServiceImpl implements AdminService {
 			User user = repository.findOne(webServiceRequest.getUserId());
 			WebService webService = new WebService();
 			webService.setName(webServiceRequest.getServiceName());
-//			webService.setUrl("http://" + KONGUSER + "/" + webService.getName() + "?apikey=" + user.getKey());
+			// webService.setUrl("http://" + KONGUSER + "/" +
+			// webService.getName() + "?apikey=" + user.getKey());
 			webService.setUrl("http://" + KONGUSER + "/" + webService.getName());
 			List<WebService> webServiceList = user.getWebServices();
 			if (webServiceList == null) {
@@ -261,10 +248,10 @@ public class AdminServiceImpl implements AdminService {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public String deleteService(String serviceName) {
-		
+
 		String url = "http://" + KONGADMIN + "/apis/" + serviceName;
 		try {
 			deleteRequest(url);
@@ -303,7 +290,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public JSONArray viewPlugins(String serviceName) {
-		String url = "http://" + KONGADMIN + "/apis/" + serviceName +"/plugins";
+		String url = "http://" + KONGADMIN + "/apis/" + serviceName + "/plugins";
 		String response = null;
 		try {
 			response = getRequest(url, null, String.class);
@@ -317,13 +304,19 @@ public class AdminServiceImpl implements AdminService {
 	/**
 	 * Gets the input params class.
 	 *
-	 * @param <T> the generic type
-	 * @param inputParams the input params
-	 * @param t the t
+	 * @param <T>
+	 *            the generic type
+	 * @param inputParams
+	 *            the input params
+	 * @param t
+	 *            the t
 	 * @return the input params class
-	 * @throws JsonParseException the json parse exception
-	 * @throws JsonMappingException the json mapping exception
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws JsonParseException
+	 *             the json parse exception
+	 * @throws JsonMappingException
+	 *             the json mapping exception
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	private <T> T getInputParamsClass(String inputParams, Class<T> t)
 			throws JsonParseException, JsonMappingException, IOException {
@@ -334,12 +327,16 @@ public class AdminServiceImpl implements AdminService {
 	/**
 	 * Gets the request.
 	 *
-	 * @param <T> the generic type
-	 * @param url the url
-	 * @param params the params
-	 * @param t the t
+	 * @param <T>
+	 *            the generic type
+	 * @param url
+	 *            the url
+	 * @param params
+	 *            the params
+	 * @param t
+	 *            the t
 	 * @return the request
-	 * @throws URISyntaxException 
+	 * @throws URISyntaxException
 	 */
 	private <T> T getRequest(String url, Map<String, String> params, Class<T> t) throws URISyntaxException {
 		RestTemplate restTemplate = new RestTemplate();
@@ -350,12 +347,17 @@ public class AdminServiceImpl implements AdminService {
 	/**
 	 * Post request.
 	 *
-	 * @param <T> the generic type
-	 * @param url the url
-	 * @param params the params
-	 * @param t the t
+	 * @param <T>
+	 *            the generic type
+	 * @param url
+	 *            the url
+	 * @param params
+	 *            the params
+	 * @param t
+	 *            the t
 	 * @return the t
-	 * @throws URISyntaxException the URI syntax exception
+	 * @throws URISyntaxException
+	 *             the URI syntax exception
 	 */
 	private <T> T postRequest(String url, Map<String, String> params, Class<T> t) throws URISyntaxException {
 		URI uri = new URI(url);
@@ -367,6 +369,21 @@ public class AdminServiceImpl implements AdminService {
 		URI uri = new URI(url);
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.delete(uri);
+	}
+
+	@Override
+	public Result registerService(ServiceRegister service) {
+		Result result = new Result();
+		try {
+			String url = "http://" + apiConfig.getAdminhost() + "/apis/";
+			Map<String, String> serviceParams =  ServiceUrlBuilder.registerServiceBuilderParams(service);
+			String response = postRequest(url, serviceParams, String.class);
+			result.setResponseCode(200);
+			result.setResponseMsg(response);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 
 }

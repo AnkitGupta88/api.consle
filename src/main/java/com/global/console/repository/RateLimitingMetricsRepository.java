@@ -1,13 +1,11 @@
-package com.global.repository;
+package com.global.console.repository;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.global.dto.RateLimiting_Metrics;
+import com.global.console.model.RateLimiting_Metrics;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface RateLimitingMetricsRepository.
  */

@@ -1,21 +1,18 @@
-package com.global.repository;
+package com.global.console.repository;
 
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.global.dto.WebServiceRequests;
+import com.global.console.model.WebServiceRequests;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface RequestRepository.
  */
 public interface RequestRepository extends CrudRepository<WebServiceRequests, String>{
 
-	/* (non-Javadoc)
-	 * @see org.springframework.data.repository.CrudRepository#findAll()
-	 */
+	@Override
 	public List<WebServiceRequests> findAll();
 
 	/**

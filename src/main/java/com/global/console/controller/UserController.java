@@ -1,4 +1,4 @@
-package com.global.controller;
+package com.global.console.controller;
 
 import java.util.UUID;
 
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.global.dto.User;
-import com.global.service.UserService;
+import com.global.console.model.User;
+import com.global.console.service.UserService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
