@@ -21,7 +21,9 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.global.console.configuration.ApiConfiguration;
+import com.global.console.dao.impl.UserDaoImpl;
 import com.global.console.dto.ServiceRegister;
+import com.global.console.dto.UserDetail;
 import com.global.console.model.RateLimiting_Metrics;
 import com.global.console.model.User;
 import com.global.console.model.WebService;
@@ -31,7 +33,8 @@ import com.global.console.repository.RequestRepository;
 import com.global.console.repository.UserRepository;
 import com.global.console.response.Result;
 import com.global.console.service.AdminService;
-import com.global.console.utils.ServiceUrlBuilder;
+import com.global.console.utils.ApiConstants;
+import com.global.console.utils.ServiceUrlBuilderParams;
 
 /**
  * The Class AdminServiceImpl.
@@ -59,65 +62,62 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private RateLimitingMetricsRepository rateLimitingRepository;
 
+	@Autowired
+	UserDaoImpl userDaoImpl;
+
 	@Override
-	public String addUser(String userParams) {
-		User user = null;
+	public Result addUser(UserDetail user) {
+		Map<String, String> params = null;
+		JSONObject response = null;
+		String url = null;
+		Result result = new Result();
 		try {
-			user = getInputParamsClass(userParams, User.class);
-		} catch (IOException e) {
+			url = apiConfig.getAdminUrl() + "/" + ApiConstants.CONSUMERS + "/";
+			params = ServiceUrlBuilderParams.addUserServiceBuilderParams(user);
+			response = postRequest(url, params, JSONObject.class);
+			String id = response.get(ApiConstants.ID).toString();
+
+			url = apiConfig.getAdminUrl() + "/" + ApiConstants.CONSUMERS + "/" + user.getUserName() + "/" + ApiConstants.KEY_AUTH;
+			params = ServiceUrlBuilderParams.addUserKeyServiceBuilderParams(user);
+			response = postRequest(url, null, JSONObject.class);
+			String key = response.get(ApiConstants.KEY).toString();
+
+			userDaoImpl.addUser(user, id, key);
+
+			result.setResponseMsg(id);
+			result.setResponseCode(HttpStatus.OK);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		if (user != null) {
-			Map<String, String> params = null;
-			JSONObject json = null;
-			String response = null;
-			String url = null;
-			try {
-				params = new HashMap<>();
-				params.put("username", user.getName());
-				url = "http://" + KONGADMIN + "/consumers/";
-				response = postRequest(url, params, String.class);
-				json = (JSONObject) JSONValue.parse(response);
-				user.setId(json.get("id").toString());
-
-				params.clear();
-				params.put(" ", " ");
-				url = "http://" + KONGADMIN + "/consumers/" + user.getName() + "/key-auth";
-				response = postRequest(url, null, String.class);
-				json = (JSONObject) JSONValue.parse(response);
-				user.setKey((String) json.get("key"));
-				repository.save(user);
-
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			}
-		}
-		return user.getId();
+		return result;
 	}
 
 	@Override
 	public List<User> viewAllUsers() {
-		return repository.findAll();
+		return userDaoImpl.findAll();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject viewUser(String id) {
+	public Result viewUser(String id) {
+		Result result = new Result();
 		JSONObject userDetails = new JSONObject();
 		userDetails.put("user", repository.findById(id));
 		String response = null;
-		String url = "http://" + KONGADMIN + "/plugins?consumer_id=" + id;
+		String url = apiConfig.getAdminUrl() + "/" + ApiConstants.plugins + "?" + ApiConstants.consumer_id + "=" + id;
 		try {
 			response = getRequest(url, null, String.class);
+			result.setResponseMsg(response);
+			result.setResponseCode(HttpStatus.OK);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-		JSONObject json = (JSONObject) JSONValue.parse(response);
-		userDetails.put("Plugins", json.get("data"));
-		List<RateLimiting_Metrics> rateLimiting_metrics = rateLimitingRepository.findByIdentifier(id);
-		userDetails.put("Rate Limiting", rateLimiting_metrics);
-		return userDetails;
+//		JSONObject json = (JSONObject) JSONValue.parse(response);
+//		userDetails.put("Plugins", json.get("data"));
+//		List<RateLimiting_Metrics> rateLimiting_metrics = rateLimitingRepository.findByIdentifier(id);
+//		userDetails.put("Rate Limiting", rateLimiting_metrics);
+		return result;
 	}
 
 	@Override
@@ -375,10 +375,10 @@ public class AdminServiceImpl implements AdminService {
 	public Result registerService(ServiceRegister service) {
 		Result result = new Result();
 		try {
-			String url = "http://" + apiConfig.getAdminhost() + "/apis/";
-			Map<String, String> serviceParams =  ServiceUrlBuilder.registerServiceBuilderParams(service);
+			String url = apiConfig.getAdminUrl() + "/" + ApiConstants.APIS + "/";
+			Map<String, String> serviceParams = ServiceUrlBuilderParams.registerServiceBuilderParams(service);
 			String response = postRequest(url, serviceParams, String.class);
-			result.setResponseCode(200);
+			result.setResponseCode(HttpStatus.OK);
 			result.setResponseMsg(response);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,10 +1,15 @@
 package com.global.console.dao.impl;
 
+import java.util.List;
+
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.ui.ModelMap;
 
 import com.global.console.dao.UserDao;
 import com.global.console.dto.UserDetail;
+import com.global.console.model.User;
 import com.global.console.repository.UserRepository;
 
 @Repository
@@ -16,11 +21,20 @@ public class UserDaoImpl implements UserDao{
 
 	
 	public UserDaoImpl() {
-		// TODO Auto-generated constructor stub
 	}
 
-	public void addUser(UserDetail userDetail){
-		
+	@Override
+	public void addUser(UserDetail userDetail, String id, String key){
+		ModelMapper modelMapper = new ModelMapper();
+		User user = modelMapper.map(userDetail, User.class);
+		user.setId(id);
+		user.setKey(key);
+		userRepository.save(user);
 	}
-	
+
+	@Override
+	public List<User> findAll() {
+		return userRepository.findAll();
+	}
+
 }

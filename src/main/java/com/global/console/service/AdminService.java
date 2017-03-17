@@ -6,6 +6,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.global.console.dto.ServiceRegister;
+import com.global.console.dto.UserDetail;
 import com.global.console.model.User;
 import com.global.console.model.WebServiceRequests;
 import com.global.console.response.Result;
@@ -21,7 +22,7 @@ public interface AdminService {
 	 * @param userParams the user params
 	 * @return the string
 	 */
-	public String addUser(String userParams);
+	public Result addUser(UserDetail user);
 	
 	/**
 	 * View all users.
@@ -36,7 +37,7 @@ public interface AdminService {
 	 * @param id the id
 	 * @return the user
 	 */
-	public JSONObject viewUser(String id);
+	public Result viewUser(String id);
 	
 	/**
 	 * View services.

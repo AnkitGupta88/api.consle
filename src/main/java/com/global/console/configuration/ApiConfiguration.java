@@ -6,6 +6,7 @@ package com.global.console.configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class ApiConfiguration.
  *
@@ -14,9 +15,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ApiConfiguration {
 
-	/** The adminhost. */
+	/** The admin host. */
 	@Value("${kong.admin.host}")
-	private String adminhost;
+	private String adminHost;
 
 	/** The admin port. */
 	@Value("${kong.admin.port}")
@@ -27,8 +28,8 @@ public class ApiConfiguration {
 	 *
 	 * @return the adminhost
 	 */
-	public String getAdminhost() {
-		return adminhost;
+	public String getAdminHost() {
+		return adminHost;
 	}
 
 	/**
@@ -39,5 +40,13 @@ public class ApiConfiguration {
 	public String getAdminPort() {
 		return adminPort;
 	}
-	
+
+	/**
+	 * Gets the admin url.
+	 *
+	 * @return the admin url
+	 */
+	public String getAdminUrl() {
+		return "http://" + adminHost + ":" + adminPort;
+	}
 }

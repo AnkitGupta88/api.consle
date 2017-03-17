@@ -1,12 +1,14 @@
 package com.global.console.response;
 
+import org.springframework.http.HttpStatus;
+
 /**
  * The Class Result.
  */
 public class Result {
 
 	/** The response code. */
-	private int responseCode;
+	private HttpStatus responseCode;
 
 	/** The response msg. */
 	private String responseMsg;
@@ -16,7 +18,7 @@ public class Result {
 	 *
 	 * @return the response code
 	 */
-	public int getResponseCode() {
+	public HttpStatus getResponseCode() {
 		return responseCode;
 	}
 
@@ -26,7 +28,7 @@ public class Result {
 	 * @param responseCode
 	 *            the new response code
 	 */
-	public void setResponseCode(int responseCode) {
+	public void setResponseCode(HttpStatus responseCode) {
 		this.responseCode = responseCode;
 	}
 
