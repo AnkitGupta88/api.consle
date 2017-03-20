@@ -1,10 +1,10 @@
 package com.global.console.service;
 
-import java.util.UUID;
-
 import org.json.simple.JSONArray;
 
+import com.global.console.dto.ServiceRequest;
 import com.global.console.model.User;
+import com.global.console.response.Result;
 
 /**
  * The Interface UserService.
@@ -18,7 +18,7 @@ public interface UserService {
 	 * @param serviceName the service name
 	 * @return the uuid
 	 */
-	public UUID requestAccess(String userId, String serviceName);
+	public Result requestAccess(ServiceRequest serviceRequest);
 	
 	/**
 	 * View access.

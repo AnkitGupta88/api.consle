@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.global.console.model.WebServiceRequests;
-import com.global.console.service.AdminService;
+import com.global.console.service.AdminRequest;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,7 +26,7 @@ public class AdminRequestController {
 
 	/** The admin service. */
 	@Autowired
-	private AdminService adminService;
+	private AdminRequest adminService;
 
 	/**
 	 * Grant access.

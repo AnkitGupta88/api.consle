@@ -3,11 +3,8 @@ package com.global.console.service.impl;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -23,19 +20,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.global.console.configuration.ApiConfiguration;
 import com.global.console.dao.impl.UserDaoImpl;
 import com.global.console.dto.ServiceRegister;
-import com.global.console.dto.UserDetail;
-import com.global.console.model.RateLimiting_Metrics;
-import com.global.console.model.User;
-import com.global.console.model.WebService;
-import com.global.console.model.WebServiceRequests;
-import com.global.console.repository.RateLimitingMetricsRepository;
-import com.global.console.repository.RequestRepository;
-import com.global.console.repository.UserRepository;
 import com.global.console.response.Result;
 import com.global.console.service.AdminService;
 import com.global.console.utils.ApiConstants;
 import com.global.console.utils.ServiceUrlBuilderParams;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class AdminServiceImpl.
  */
@@ -45,81 +35,19 @@ public class AdminServiceImpl implements AdminService {
 	/** The Constant KONGADMIN. */
 	private static final String KONGADMIN = "172.16.24.73:8001";
 
-	/** The Constant KONGUSER. */
-	private static final String KONGUSER = "172.16.24.73:8000";
-
+	/** The api config. */
 	@Autowired
 	private ApiConfiguration apiConfig;
 
-	/** The repository. */
-	@Autowired
-	private UserRepository repository;
-
-	/** The request repository. */
-	@Autowired
-	private RequestRepository requestRepository;
-
-	@Autowired
-	private RateLimitingMetricsRepository rateLimitingRepository;
-
+	/** The user dao impl. */
 	@Autowired
 	UserDaoImpl userDaoImpl;
 
-	@Override
-	public Result addUser(UserDetail user) {
-		Map<String, String> params = null;
-		JSONObject response = null;
-		String url = null;
-		Result result = new Result();
-		try {
-			url = apiConfig.getAdminUrl() + "/" + ApiConstants.CONSUMERS + "/";
-			params = ServiceUrlBuilderParams.addUserServiceBuilderParams(user);
-			response = postRequest(url, params, JSONObject.class);
-			String id = response.get(ApiConstants.ID).toString();
-
-			url = apiConfig.getAdminUrl() + "/" + ApiConstants.CONSUMERS + "/" + user.getUserName() + "/" + ApiConstants.KEY_AUTH;
-			params = ServiceUrlBuilderParams.addUserKeyServiceBuilderParams(user);
-			response = postRequest(url, null, JSONObject.class);
-			String key = response.get(ApiConstants.KEY).toString();
-
-			userDaoImpl.addUser(user, id, key);
-
-			result.setResponseMsg(id);
-			result.setResponseCode(HttpStatus.OK);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return result;
-	}
-
-	@Override
-	public List<User> viewAllUsers() {
-		return userDaoImpl.findAll();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public Result viewUser(String id) {
-		Result result = new Result();
-		JSONObject userDetails = new JSONObject();
-		userDetails.put("user", repository.findById(id));
-		String response = null;
-		String url = apiConfig.getAdminUrl() + "/" + ApiConstants.plugins + "?" + ApiConstants.consumer_id + "=" + id;
-		try {
-			response = getRequest(url, null, String.class);
-			result.setResponseMsg(response);
-			result.setResponseCode(HttpStatus.OK);
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-//		JSONObject json = (JSONObject) JSONValue.parse(response);
-//		userDetails.put("Plugins", json.get("data"));
-//		List<RateLimiting_Metrics> rateLimiting_metrics = rateLimitingRepository.findByIdentifier(id);
-//		userDetails.put("Rate Limiting", rateLimiting_metrics);
-		return result;
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.global.console.service.AdminService#viewServices()
+	 */
 	@Override
 	public JSONArray viewServices() {
 		String url = null;
@@ -135,6 +63,11 @@ public class AdminServiceImpl implements AdminService {
 		return data;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.global.console.service.AdminService#addService(java.lang.String)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject addService(String inputParams) {
@@ -188,67 +121,12 @@ public class AdminServiceImpl implements AdminService {
 		return json;
 	}
 
-	@Override
-	public List<WebServiceRequests> viewRequests() {
-		return requestRepository.findAll();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public String grantService(String inputParams) {
-
-		Map<String, Object> inputs = null;
-		try {
-			inputs = getInputParamsClass(inputParams, Map.class);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		if (inputs.get("id") != null) {
-			UUID id = UUID.fromString((String) inputs.get("id"));
-			String configType = (inputs.get("configType") != null ? (String) inputs.get("configType") : "hour");
-			String permittedRequests = (inputs.get("permittedRequests") != null
-					? (String) inputs.get("permittedRequests") : "100");
-
-			WebServiceRequests webServiceRequest = requestRepository.findById(id);
-			webServiceRequest.setStatus("completed");
-			requestRepository.save(webServiceRequest);
-			Map<String, String> params = new HashMap<>();
-			String url = null;
-			try {
-				params.put("name", "rate-limiting");
-				params.put("consumer_id", webServiceRequest.getUserId());
-				params.put("config." + configType, permittedRequests);
-				url = "http://" + KONGADMIN + "/apis/" + webServiceRequest.getServiceName() + "/plugins/";
-				postRequest(url, params, String.class);
-
-				params.clear();
-				params.put("group", webServiceRequest.getServiceName());
-				url = "http://" + KONGADMIN + "/consumers/" + webServiceRequest.getUserId() + "/acls/";
-				postRequest(url, params, String.class);
-
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			}
-
-			User user = repository.findOne(webServiceRequest.getUserId());
-			WebService webService = new WebService();
-			webService.setName(webServiceRequest.getServiceName());
-			// webService.setUrl("http://" + KONGUSER + "/" +
-			// webService.getName() + "?apikey=" + user.getKey());
-			webService.setUrl("http://" + KONGUSER + "/" + webService.getName());
-			List<WebService> webServiceList = user.getWebServices();
-			if (webServiceList == null) {
-				webServiceList = new ArrayList<>();
-			}
-			webServiceList.add(webService);
-			user.setWebServices(webServiceList);
-			repository.save(user);
-			return id.toString();
-		} else {
-			return null;
-		}
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.global.console.service.AdminService#deleteService(java.lang.String)
+	 */
 	@Override
 	public String deleteService(String serviceName) {
 
@@ -263,6 +141,12 @@ public class AdminServiceImpl implements AdminService {
 		return serviceName;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.global.console.service.AdminService#viewService(java.lang.String)
+	 */
 	@Override
 	public JSONObject viewService(String serviceName) {
 		String url = "http://" + KONGADMIN + "/apis/" + serviceName;
@@ -276,6 +160,13 @@ public class AdminServiceImpl implements AdminService {
 		return res;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.global.console.service.AdminService#deletePlugins(java.lang.String,
+	 * java.lang.String)
+	 */
 	@Override
 	public String deletePlugins(String serviceName, String id) {
 		String url = "http://" + KONGADMIN + "/apis/" + serviceName + "/plugins/" + id;
@@ -288,6 +179,12 @@ public class AdminServiceImpl implements AdminService {
 		return serviceName;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.global.console.service.AdminService#viewPlugins(java.lang.String)
+	 */
 	@Override
 	public JSONArray viewPlugins(String serviceName) {
 		String url = "http://" + KONGADMIN + "/apis/" + serviceName + "/plugins";
@@ -337,6 +234,7 @@ public class AdminServiceImpl implements AdminService {
 	 *            the t
 	 * @return the request
 	 * @throws URISyntaxException
+	 *             the URI syntax exception
 	 */
 	private <T> T getRequest(String url, Map<String, String> params, Class<T> t) throws URISyntaxException {
 		RestTemplate restTemplate = new RestTemplate();
@@ -365,12 +263,26 @@ public class AdminServiceImpl implements AdminService {
 		return restTemplate.postForObject(uri, params, t);
 	}
 
+	/**
+	 * Delete request.
+	 *
+	 * @param url
+	 *            the url
+	 * @throws URISyntaxException
+	 *             the URI syntax exception
+	 */
 	private void deleteRequest(String url) throws URISyntaxException {
 		URI uri = new URI(url);
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.delete(uri);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.global.console.service.AdminService#registerService(com.global.
+	 * console.dto.ServiceRegister)
+	 */
 	@Override
 	public Result registerService(ServiceRegister service) {
 		Result result = new Result();

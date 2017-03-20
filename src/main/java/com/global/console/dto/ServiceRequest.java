@@ -10,9 +10,6 @@ package com.global.console.dto;
  */
 public class ServiceRequest {
 
-	/** The service id. */
-	private String serviceId;
-	
 	/** The service name. */
 	private String serviceName;
 	
@@ -21,24 +18,6 @@ public class ServiceRequest {
 	
 	/** The subscription. */
 	private String subscription;
-
-	/**
-	 * Gets the service id.
-	 *
-	 * @return the service id
-	 */
-	public String getServiceId() {
-		return serviceId;
-	}
-
-	/**
-	 * Sets the service id.
-	 *
-	 * @param serviceId the new service id
-	 */
-	public void setServiceId(String serviceId) {
-		this.serviceId = serviceId;
-	}
 
 	/**
 	 * Gets the service name.

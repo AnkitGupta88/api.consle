@@ -2,7 +2,6 @@ package com.global.console.controller;
 
 import java.util.List;
 
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,13 +9,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.global.console.dto.UserDetail;
 import com.global.console.model.User;
 import com.global.console.response.Result;
-import com.global.console.service.AdminService;
+import com.global.console.response.UserResponse;
+import com.global.console.service.AdminUser;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,7 +30,7 @@ public class AdminUserController {
 
 	/** The admin service. */
 	@Autowired
-	private AdminService adminService;
+	private AdminUser adminService;
 
 	/**
 	 * Adds the user.
@@ -68,9 +67,9 @@ public class AdminUserController {
 	 */
 	@ApiOperation(value = "View Particular User", notes = "View a particular user")
 	@RequestMapping(value = "/user/{userId}", method = RequestMethod.POST)
-	public ResponseEntity<String> viewUser(@PathVariable String userId) {
-		Result result = adminService.viewUser(userId);
-		return new ResponseEntity<String>(result.getResponseMsg(), result.getResponseCode());
+	public ResponseEntity<UserResponse> viewUser(@PathVariable String userId) {
+		UserResponse result = adminService.viewUser(userId);
+		return new ResponseEntity<UserResponse>(result, result.getResponseCode());
 	}
 
 }

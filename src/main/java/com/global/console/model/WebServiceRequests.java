@@ -14,15 +14,37 @@ public class WebServiceRequests {
 	/** The id. */
 	@PrimaryKey
 	private UUID id;
-	
+
 	/** The service name. */
 	private String serviceName;
-	
+
 	/** The user id. */
 	private String userId;
-	
+
 	/** The status. */
 	private String status;
+
+	/** The subscription. */
+	private String subscription;
+
+	/**
+	 * Gets the subscription.
+	 *
+	 * @return the subscription
+	 */
+	public String getSubscription() {
+		return subscription;
+	}
+
+	/**
+	 * Sets the subscription.
+	 *
+	 * @param subscription
+	 *            the new subscription
+	 */
+	public void setSubscription(String subscription) {
+		this.subscription = subscription;
+	}
 
 	/**
 	 * Gets the id.
@@ -36,7 +58,8 @@ public class WebServiceRequests {
 	/**
 	 * Sets the id.
 	 *
-	 * @param id the new id
+	 * @param id
+	 *            the new id
 	 */
 	public void setId(UUID id) {
 		this.id = id;
@@ -54,7 +77,8 @@ public class WebServiceRequests {
 	/**
 	 * Sets the service name.
 	 *
-	 * @param serviceName the new service name
+	 * @param serviceName
+	 *            the new service name
 	 */
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
@@ -72,7 +96,8 @@ public class WebServiceRequests {
 	/**
 	 * Sets the user id.
 	 *
-	 * @param userId the new user id
+	 * @param userId
+	 *            the new user id
 	 */
 	public void setUserId(String userId) {
 		this.userId = userId;
@@ -90,10 +115,11 @@ public class WebServiceRequests {
 	/**
 	 * Sets the status.
 	 *
-	 * @param status the new status
+	 * @param status
+	 *            the new status
 	 */
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
 }

@@ -1,18 +1,16 @@
 package com.global.console.controller;
 
-import java.util.UUID;
-
 import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.global.console.model.User;
+import com.global.console.dto.ServiceRequest;
+import com.global.console.response.Result;
 import com.global.console.service.UserService;
 
 import io.swagger.annotations.Api;
@@ -38,11 +36,11 @@ public class UserController {
 	 * @return the response entity
 	 */
 	@ApiOperation(value = "Request Access", notes = "Request Access for a Web Service")
-	@RequestMapping(value = "/{userId}/request", method = RequestMethod.POST)
-	public ResponseEntity<UUID> requestAccess(@PathVariable String userId, @RequestParam String serviceName, @RequestParam String packageName)
+	@RequestMapping(value = "/request", method = RequestMethod.POST)
+	public ResponseEntity<String> requestAccess(@RequestBody ServiceRequest serviceRequest)
 	{
-		UUID id = userService.requestAccess(userId, serviceName);
-		return new ResponseEntity<UUID>(id, HttpStatus.OK);
+		Result result = userService.requestAccess(serviceRequest);
+		return new ResponseEntity<String>(result.getResponseMsg(), result.getResponseCode());
 	}
 
 	/**
@@ -52,12 +50,12 @@ public class UserController {
 	 *            the user id
 	 * @return the response entity
 	 */
-	@ApiOperation(value = "View Accesses", notes = "View all Web Service accesses")
-	@RequestMapping(value = "/{userId}/view", method = RequestMethod.POST)
-	public ResponseEntity<User> viewAccess(@PathVariable String userId) {
-		User user = userService.viewAccess(userId);
-		return new ResponseEntity<User>(user, HttpStatus.OK);
-	}
+//	@ApiOperation(value = "View Accesses", notes = "View all Web Service accesses")
+//	@RequestMapping(value = "/{userId}/view", method = RequestMethod.POST)
+//	public ResponseEntity<User> viewAccess(@PathVariable String userId) {
+//		User user = userService.viewAccess(userId);
+//		return new ResponseEntity<User>(user, HttpStatus.OK);
+//	}
 
 	/**
 	 * View services.

@@ -17,7 +17,7 @@ public interface UserRepository extends CrudRepository<User, String>{
 	 * @param name the name
 	 * @return the list
 	 */
-	public List<User> findByName(String name);
+	public List<User> findByUserName(String userName);
 
 	/**
 	 * Find by id.

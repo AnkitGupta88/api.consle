@@ -5,7 +5,6 @@ import java.util.List;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.ui.ModelMap;
 
 import com.global.console.dao.UserDao;
 import com.global.console.dto.UserDetail;
