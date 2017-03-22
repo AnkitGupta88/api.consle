@@ -1,0 +1,52 @@
+Controllers : 
+	Admin : 
+		Admin User Controller
+		Admin Service Controller
+		Admin Request Controller
+	User : 
+		User Controller
+		
+Register a user
+	Admin User Controller :
+		users/add :
+			Input : 	{
+						  "emailId": "string",
+						  "firstName": "string",
+						  "lastName": "string",
+						  "phoneNo": "string",
+						  "userName": "string"
+						}
+			Output : 	User ID
+			
+Register a service
+	Admin Service Controller :
+		services/register :
+			Input : 	{
+						  "apiName": "string",			#Unique URL to be diverted to
+						  "createdBy": "string",		#Name of the admin
+						  "serviceName": "string",		#Unique name of the Service
+						  "serviceUrl": "string"		#URL of the service
+						}
+			Output : 	Details of the service
+			
+Generating a request
+	User Controller : 
+		user/request :
+			Input :		{
+						  "serviceName": "string",		#Name of the service for which access is to be granted
+						  "subscription": "string",		#Subscription Package : Currently Hardcoded 3 packages
+															free 	: 10 Requests per hour
+															silver 	: 10 Requests per minute
+															gold 	: 10 Requests per second
+						  "userId": "string"			#UserId of the user generating the request
+						}
+			Output : 	Request ID
+						
+Granting Access to a request
+	Admin Request Controller :
+		request/grant :
+			Input : 	Request ID
+			Output :	Request ID
+			
+			
+Once access is granted, the URL can be accessed at http://159.203.141.233:8000/{APINAME / UNIQUE URL}?apikey={KEY OF THE USER}

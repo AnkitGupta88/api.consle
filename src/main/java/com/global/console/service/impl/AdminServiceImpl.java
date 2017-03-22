@@ -32,9 +32,6 @@ import com.global.console.utils.ServiceUrlBuilderParams;
 @Service
 public class AdminServiceImpl implements AdminService {
 
-	/** The Constant KONGADMIN. */
-	private static final String KONGADMIN = "172.16.24.73:8001";
-
 	/** The api config. */
 	@Autowired
 	private ApiConfiguration apiConfig;
@@ -52,7 +49,7 @@ public class AdminServiceImpl implements AdminService {
 	public JSONArray viewServices() {
 		String url = null;
 		String response = null;
-		url = "http://" + KONGADMIN + "/apis";
+		url = apiConfig.getAdminUrl() + "/apis";
 		try {
 			response = getRequest(url, null, String.class);
 		} catch (URISyntaxException e) {
@@ -92,24 +89,24 @@ public class AdminServiceImpl implements AdminService {
 			params.put("request_host", request_host);
 			params.put("request_path", "/" + name);
 			params.put("strip_request_path", "true");
-			url = "http://" + KONGADMIN + "/apis/";
+			url = apiConfig.getAdminUrl() + "/apis/";
 			response = postRequest(url, params, String.class);
 
 			params.clear();
 			params.put("name", "key-auth");
-			url = "http://" + KONGADMIN + "/apis/" + name + "/plugins/";
+			url = apiConfig.getAdminUrl() + "/apis/" + name + "/plugins/";
 			postRequest(url, params, String.class);
 
 			params.clear();
 			params.put("name", "rate-limiting");
 			params.put("config.second", "0");
-			url = "http://" + KONGADMIN + "/apis/" + name + "/plugins/";
+			url = apiConfig.getAdminUrl() + "/apis/" + name + "/plugins/";
 			postRequest(url, params, String.class);
 
 			params.clear();
 			params.put("name", "acl");
 			params.put("config.whitelist", name);
-			url = "http://" + KONGADMIN + "/apis/" + name + "/plugins/";
+			url = apiConfig.getAdminUrl() + "/apis/" + name + "/plugins/";
 			postRequest(url, params, String.class);
 
 		} catch (URISyntaxException e) {
@@ -130,7 +127,7 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public String deleteService(String serviceName) {
 
-		String url = "http://" + KONGADMIN + "/apis/" + serviceName;
+		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName;
 		try {
 			deleteRequest(url);
 		} catch (URISyntaxException e) {
@@ -149,7 +146,7 @@ public class AdminServiceImpl implements AdminService {
 	 */
 	@Override
 	public JSONObject viewService(String serviceName) {
-		String url = "http://" + KONGADMIN + "/apis/" + serviceName;
+		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName;
 		String response = null;
 		try {
 			response = getRequest(url, null, String.class);
@@ -169,7 +166,7 @@ public class AdminServiceImpl implements AdminService {
 	 */
 	@Override
 	public String deletePlugins(String serviceName, String id) {
-		String url = "http://" + KONGADMIN + "/apis/" + serviceName + "/plugins/" + id;
+		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName + "/plugins/" + id;
 		try {
 			deleteRequest(url);
 		} catch (URISyntaxException e) {
@@ -187,7 +184,7 @@ public class AdminServiceImpl implements AdminService {
 	 */
 	@Override
 	public JSONArray viewPlugins(String serviceName) {
-		String url = "http://" + KONGADMIN + "/apis/" + serviceName + "/plugins";
+		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName + "/plugins";
 		String response = null;
 		try {
 			response = getRequest(url, null, String.class);
@@ -292,6 +289,24 @@ public class AdminServiceImpl implements AdminService {
 			String response = postRequest(url, serviceParams, String.class);
 			result.setResponseCode(HttpStatus.OK);
 			result.setResponseMsg(response);
+			
+			serviceParams.clear();
+			serviceParams.put("name", "key-auth");
+			url = apiConfig.getAdminUrl() + "/apis/" + service.getServiceName() + "/plugins/";
+			postRequest(url, serviceParams, String.class);
+
+			serviceParams.clear();
+			serviceParams.put("name", "rate-limiting");
+			serviceParams.put("config.second", "10");
+			url = apiConfig.getAdminUrl() + "/apis/" + service.getServiceName() + "/plugins/";
+			postRequest(url, serviceParams, String.class);
+
+			serviceParams.clear();
+			serviceParams.put("name", "acl");
+			serviceParams.put("config.whitelist", service.getServiceName());
+			url = apiConfig.getAdminUrl() + "/apis/" + service.getServiceName() + "/plugins/";
+			postRequest(url, serviceParams, String.class);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

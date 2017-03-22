@@ -37,8 +37,8 @@ public class AdminRequestController {
 	 */
 	@ApiOperation(value = "Grant Access", notes = "Grant access to a Web Services")
 	@RequestMapping(value = "/request/grant", method = RequestMethod.POST)
-	public ResponseEntity<String> grantAccess(@RequestParam String inputParams) {
-		String response = adminService.grantService(inputParams);
+	public ResponseEntity<String> grantAccess(@RequestParam String requestId) {
+		String response = adminService.grantService(requestId);
 		return new ResponseEntity<String>(response, HttpStatus.OK);
 	}
 

@@ -22,6 +22,13 @@ public class ApiConfiguration {
 	/** The admin port. */
 	@Value("${kong.admin.port}")
 	private String adminPort;
+	
+	@Value("${kong.user.host}")
+	private String userHost;
+
+	/** The admin port. */
+	@Value("${kong.user.port}")
+	private String userPort;
 
 	/**
 	 * Gets the adminhost.
@@ -49,4 +56,18 @@ public class ApiConfiguration {
 	public String getAdminUrl() {
 		return "http://" + adminHost + ":" + adminPort;
 	}
+
+	public String getUserHost() {
+		return userHost;
+	}
+
+	public String getUserPort() {
+		return userPort;
+	}
+
+	public String getUserUrl() {
+		return "http://" + userHost + ":" + userPort;
+	}
+
+	
 }

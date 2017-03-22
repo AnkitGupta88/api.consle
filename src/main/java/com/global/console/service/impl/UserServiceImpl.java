@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.global.console.configuration.ApiConfiguration;
 import com.global.console.dao.impl.RequestsDaoImpl;
 import com.global.console.dto.ServiceRequest;
 import com.global.console.model.User;
@@ -30,6 +31,9 @@ public class UserServiceImpl implements UserService {
 	/** The user repository. */
 	@Autowired
 	private RequestsDaoImpl requestsDaoImpl;
+	
+	@Autowired
+	private ApiConfiguration apiConfig;
 
 	/** The user repository. */
 	@Autowired
@@ -71,7 +75,7 @@ public class UserServiceImpl implements UserService {
 	public JSONArray viewServices() {
 		String url = null;
 		String response = null;
-		url = "http://172.16.24.73:8001/apis";
+		url = apiConfig.getAdminUrl() + "/apis";
 		try {
 			response = getRequest(url, null, String.class);
 		} catch (URISyntaxException e) {

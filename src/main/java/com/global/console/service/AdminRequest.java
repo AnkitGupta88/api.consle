@@ -16,7 +16,7 @@ public interface AdminRequest {
 	 *            the input params
 	 * @return the string
 	 */
-	public String grantService(String inputParams);
+	public String grantService(String requestId);
 
 	/**
 	 * View requests.
