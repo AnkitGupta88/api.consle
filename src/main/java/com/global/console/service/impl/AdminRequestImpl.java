@@ -3,22 +3,27 @@ package com.global.console.service.impl;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.global.console.configuration.ApiConfiguration;
 import com.global.console.dao.impl.UserDaoImpl;
+import com.global.console.model.Plan;
 import com.global.console.model.User;
 import com.global.console.model.WebService;
 import com.global.console.model.WebServiceRequests;
+import com.global.console.repository.PlanRepository;
 import com.global.console.repository.RequestRepository;
 import com.global.console.repository.UserRepository;
+import com.global.console.response.Response;
 import com.global.console.service.AdminRequest;
 
 // TODO: Auto-generated Javadoc
@@ -40,6 +45,10 @@ public class AdminRequestImpl implements AdminRequest {
 	@Autowired
 	private RequestRepository requestRepository;
 
+	/** The plan repository. */
+	@Autowired
+	private PlanRepository planRepository;
+	
 	/** The user dao impl. */
 	@Autowired
 	UserDaoImpl userDaoImpl;
@@ -48,21 +57,30 @@ public class AdminRequestImpl implements AdminRequest {
 	 * @see com.global.console.service.AdminRequest#viewRequests()
 	 */
 	@Override
-	public List<WebServiceRequests> viewRequests() {
-		return requestRepository.findAll();
+	public Response<WebServiceRequests> viewRequests() {
+		Response<WebServiceRequests> response = new Response<>();
+		response.setObject(requestRepository.findAll());
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 
 	/* (non-Javadoc)
 	 * @see com.global.console.service.AdminRequest#grantService(java.lang.String)
 	 */
 	@Override
-	public String grantService(String requestId) {
+	public Response<String> grantService(String requestId) {
 
+			Response<String> response = new Response<>();
 			UUID id = UUID.fromString(requestId);
 			WebServiceRequests webServiceRequest = requestRepository.findById(id);
-			String configType = (webServiceRequest.getSubscription().equalsIgnoreCase("free") ? "hour" : (webServiceRequest.getSubscription().equalsIgnoreCase("silver")) ? "minute" : "second");
-			String permittedRequests = "10";
-
+			Plan plan = planRepository.findByPlanId(UUID.fromString(webServiceRequest.getSubscription()));
+			if(plan==null)
+			{
+				response.setObject(Arrays.asList("No such plan exists"));
+				response.setHttpStatus(HttpStatus.BAD_REQUEST);
+			}
+			else
+			{
 			webServiceRequest.setStatus("completed");
 			requestRepository.save(webServiceRequest);
 			Map<String, String> params = new HashMap<>();
@@ -70,7 +88,7 @@ public class AdminRequestImpl implements AdminRequest {
 			try {
 				params.put("name", "rate-limiting");
 				params.put("consumer_id", webServiceRequest.getUserId());
-				params.put("config." + configType, permittedRequests);
+				params.put("config." + plan.getConfigType(), ""+plan.getConfigQuantity());
 				url = apiConfig.getAdminUrl() + "/apis/" + webServiceRequest.getServiceName() + "/plugins/";
 				postRequest(url, params, String.class);
 
@@ -96,7 +114,10 @@ public class AdminRequestImpl implements AdminRequest {
 			webServiceList.add(webService);
 			user.setWebServices(webServiceList);
 			repository.save(user);
-			return id.toString();
+			response.setObject(Arrays.asList(id.toString()));
+			response.setHttpStatus(HttpStatus.OK);
+			}
+			return response;
 	}
 
 

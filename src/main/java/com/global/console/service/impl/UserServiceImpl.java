@@ -2,10 +2,10 @@ package com.global.console.service.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.UUID;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +18,9 @@ import com.global.console.dao.impl.RequestsDaoImpl;
 import com.global.console.dto.ServiceRequest;
 import com.global.console.model.User;
 import com.global.console.repository.UserRepository;
-import com.global.console.response.Result;
+import com.global.console.response.Response;
 import com.global.console.service.UserService;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class UserServiceImpl.
  */
@@ -47,12 +46,12 @@ public class UserServiceImpl implements UserService {
 	 * dto.ServiceRequest)
 	 */
 	@Override
-	public Result requestAccess(ServiceRequest serviceRequest) {
+	public Response<String> requestAccess(ServiceRequest serviceRequest) {
 		UUID id = requestsDaoImpl.createServiceRequest(serviceRequest);
-		Result result = new Result();
-		result.setResponseMsg(id.toString());
-		result.setResponseCode(HttpStatus.OK);
-		return result;
+		Response<String> response = new Response<>();
+		response.setObject(Arrays.asList(id.toString()));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 
 	/*
@@ -61,9 +60,11 @@ public class UserServiceImpl implements UserService {
 	 * @see com.global.console.service.UserService#viewAccess(java.lang.String)
 	 */
 	@Override
-	public User viewAccess(String userId) {
-		User user = userRepository.findById(userId);
-		return user;
+	public Response<User> viewAccess(String userId) {
+		Response<User> response = new Response<>();
+		response.setObject(Arrays.asList(userRepository.findById(userId)));
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 
 	/*
@@ -72,7 +73,8 @@ public class UserServiceImpl implements UserService {
 	 * @see com.global.console.service.UserService#viewServices()
 	 */
 	@Override
-	public JSONArray viewServices() {
+	public Response<Object> viewServices() {
+		Response<Object> finalResponse = new Response<>();
 		String url = null;
 		String response = null;
 		url = apiConfig.getAdminUrl() + "/apis";
@@ -82,8 +84,9 @@ public class UserServiceImpl implements UserService {
 			e.printStackTrace();
 		}
 		JSONObject json = (JSONObject) JSONValue.parse(response);
-		JSONArray data = (JSONArray) json.get("data");
-		return data;
+		finalResponse.setObject(Arrays.asList(json.get("data")));
+		finalResponse.setHttpStatus(HttpStatus.OK);
+		return finalResponse;
 	}
 
 	/**

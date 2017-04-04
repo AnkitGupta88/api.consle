@@ -3,7 +3,6 @@ package com.global.console.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,8 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.global.console.dto.UserDetail;
 import com.global.console.model.User;
-import com.global.console.response.Result;
-import com.global.console.response.UserResponse;
+import com.global.console.response.Response;
 import com.global.console.service.AdminUser;
 
 import io.swagger.annotations.Api;
@@ -41,9 +39,9 @@ public class AdminUserController {
 	 */
 	@ApiOperation(value = "Add User", notes = "Add a new user")
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public ResponseEntity<String> addUser(@RequestBody UserDetail user) {
-		Result result = adminService.addUser(user);
-		return new ResponseEntity<String>(result.getResponseMsg(), result.getResponseCode());
+	public ResponseEntity<List<String>> addUser(@RequestBody UserDetail user) {
+		Response<String> result = adminService.addUser(user);
+		return new ResponseEntity<List<String>>(result.getObject(), result.getHttpStatus());
 	}
 
 	/**
@@ -54,8 +52,8 @@ public class AdminUserController {
 	@ApiOperation(value = "View Users", notes = "View All Users")
 	@RequestMapping(value = "/users", method = RequestMethod.POST)
 	public ResponseEntity<List<User>> viewAllUsers() {
-		List<User> users = adminService.viewAllUsers();
-		return new ResponseEntity<List<User>>(users, HttpStatus.OK);
+		Response<User> users = adminService.viewAllUsers();
+		return new ResponseEntity<List<User>>(users.getObject(), users.getHttpStatus());
 	}
 
 	/**
@@ -67,9 +65,9 @@ public class AdminUserController {
 	 */
 	@ApiOperation(value = "View Particular User", notes = "View a particular user")
 	@RequestMapping(value = "/user/{userId}", method = RequestMethod.POST)
-	public ResponseEntity<UserResponse> viewUser(@PathVariable String userId) {
-		UserResponse result = adminService.viewUser(userId);
-		return new ResponseEntity<UserResponse>(result, result.getResponseCode());
+	public ResponseEntity<List<Object>> viewUser(@PathVariable String userId) {
+		Response<Object> result = adminService.viewUser(userId);
+		return new ResponseEntity<List<Object>>(result.getObject(), result.getHttpStatus());
 	}
 
 }

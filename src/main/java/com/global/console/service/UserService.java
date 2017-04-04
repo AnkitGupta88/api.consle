@@ -1,10 +1,9 @@
 package com.global.console.service;
 
-import org.json.simple.JSONArray;
 
 import com.global.console.dto.ServiceRequest;
 import com.global.console.model.User;
-import com.global.console.response.Result;
+import com.global.console.response.Response;
 
 /**
  * The Interface UserService.
@@ -18,7 +17,7 @@ public interface UserService {
 	 * @param serviceName the service name
 	 * @return the uuid
 	 */
-	public Result requestAccess(ServiceRequest serviceRequest);
+	public Response<String> requestAccess(ServiceRequest serviceRequest);
 	
 	/**
 	 * View access.
@@ -26,13 +25,13 @@ public interface UserService {
 	 * @param id the id
 	 * @return the user
 	 */
-	public User viewAccess(String id);
+	public Response<User> viewAccess(String id);
 
 	/**
 	 * View services.
 	 *
 	 * @return the JSON array
 	 */
-	public JSONArray viewServices();
+	public Response<Object> viewServices();
 
 }

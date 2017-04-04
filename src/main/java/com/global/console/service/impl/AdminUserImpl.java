@@ -2,10 +2,9 @@ package com.global.console.service.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +17,7 @@ import com.global.console.dao.impl.UserDaoImpl;
 import com.global.console.dto.UserDetail;
 import com.global.console.model.User;
 import com.global.console.repository.UserRepository;
-import com.global.console.response.Result;
-import com.global.console.response.UserResponse;
+import com.global.console.response.Response;
 import com.global.console.service.AdminUser;
 import com.global.console.utils.ApiConstants;
 import com.global.console.utils.ServiceUrlBuilderParams;
@@ -42,15 +40,18 @@ public class AdminUserImpl implements AdminUser {
 	@Autowired
 	UserDaoImpl userDaoImpl;
 
-	/* (non-Javadoc)
-	 * @see com.global.console.service.AdminUser#addUser(com.global.console.dto.UserDetail)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.global.console.service.AdminUser#addUser(com.global.console.dto.
+	 * UserDetail)
 	 */
 	@Override
-	public Result addUser(UserDetail user) {
+	public Response<String> addUser(UserDetail user) {
+		Response<String> finalResponse = new Response<>();
 		Map<String, String> params = null;
 		JSONObject response = null;
 		String url = null;
-		Result result = new Result();
 		try {
 			url = apiConfig.getAdminUrl() + "/" + ApiConstants.CONSUMERS + "/";
 			params = ServiceUrlBuilderParams.addUserServiceBuilderParams(user);
@@ -65,57 +66,63 @@ public class AdminUserImpl implements AdminUser {
 
 			userDaoImpl.addUser(user, id, key);
 
-			result.setResponseMsg(id);
-			result.setResponseCode(HttpStatus.OK);
+			finalResponse.setObject(Arrays.asList(id));
+			finalResponse.setHttpStatus(HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		return result;
+		return finalResponse;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.global.console.service.AdminUser#viewAllUsers()
 	 */
 	@Override
-	public List<User> viewAllUsers() {
-		return userDaoImpl.findAll();
+	public Response<User> viewAllUsers() {
+		Response<User> response = new Response<>();
+		response.setObject(userDaoImpl.findAll());
+		response.setHttpStatus(HttpStatus.OK);
+		return response;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.global.console.service.AdminUser#viewUser(java.lang.String)
 	 */
 	@Override
-	public UserResponse viewUser(String id) {
-		UserResponse result = new UserResponse();
-		result.setUser(repository.findById(id));
-		String response = null;
+	public Response<Object> viewUser(String id) {
+		Response<Object> response = new Response<>();
+		response.setObject(Arrays.asList(repository.findById(id)));
 		String url = apiConfig.getAdminUrl() + "/" + ApiConstants.plugins + "?" + ApiConstants.consumer_id + "=" + id;
+		String requestResponse = null;
 		try {
-			response = getRequest(url, null, String.class);
-
-			result.setPlugins((JSONArray) ((JSONObject) JSONValue.parse(response)).get("data"));
-			result.setResponseCode(HttpStatus.OK);
+			requestResponse = getRequest(url, null, String.class);
+			response.setObject(Arrays.asList(((JSONObject) JSONValue.parse(requestResponse)).get("data")));
+			response.setHttpStatus(HttpStatus.OK);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-		// JSONObject json = (JSONObject) JSONValue.parse(response);
-		// userDetails.put("Plugins", json.get("data"));
-		// List<RateLimiting_Metrics> rateLimiting_metrics =
-		// rateLimitingRepository.findByIdentifier(id);
-		// userDetails.put("Rate Limiting", rateLimiting_metrics);
-		return result;
+		return response;
 	}
 
 	/**
 	 * Gets the input params class.
 	 *
-	 * @param <T>            the generic type
-	 * @param url the url
-	 * @param params the params
-	 * @param t            the t
+	 * @param <T>
+	 *            the generic type
+	 * @param url
+	 *            the url
+	 * @param params
+	 *            the params
+	 * @param t
+	 *            the t
 	 * @return the input params class
-	 * @throws URISyntaxException the URI syntax exception
+	 * @throws URISyntaxException
+	 *             the URI syntax exception
 	 */
 
 	/**

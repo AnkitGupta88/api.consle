@@ -1,28 +1,28 @@
 package com.global.console.service;
 
-import java.util.List;
-
 import com.global.console.model.WebServiceRequests;
+import com.global.console.response.Response;
 
+// TODO: Auto-generated Javadoc
 /**
- * The Interface AdminService.
+ * The Interface AdminRequest.
  */
 public interface AdminRequest {
 
 	/**
 	 * Grant service.
 	 *
-	 * @param inputParams
-	 *            the input params
+	 * @param requestId
+	 *            the request id
 	 * @return the string
 	 */
-	public String grantService(String requestId);
+	public Response<String> grantService(String requestId);
 
 	/**
 	 * View requests.
 	 *
 	 * @return the list
 	 */
-	public List<WebServiceRequests> viewRequests();
+	public Response<WebServiceRequests> viewRequests();
 
 }
