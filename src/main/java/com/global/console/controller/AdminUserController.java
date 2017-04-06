@@ -1,7 +1,5 @@
 package com.global.console.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,9 +37,9 @@ public class AdminUserController {
 	 */
 	@ApiOperation(value = "Add User", notes = "Add a new user")
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public ResponseEntity<List<String>> addUser(@RequestBody UserDetail user) {
+	public ResponseEntity<Response<String>> addUser(@RequestBody UserDetail user) {
 		Response<String> result = adminService.addUser(user);
-		return new ResponseEntity<List<String>>(result.getObject(), result.getHttpStatus());
+		return new ResponseEntity<Response<String>>(result, result.getHttpStatus());
 	}
 
 	/**
@@ -51,9 +49,9 @@ public class AdminUserController {
 	 */
 	@ApiOperation(value = "View Users", notes = "View All Users")
 	@RequestMapping(value = "/users", method = RequestMethod.POST)
-	public ResponseEntity<List<User>> viewAllUsers() {
+	public ResponseEntity<Response<User>> viewAllUsers() {
 		Response<User> users = adminService.viewAllUsers();
-		return new ResponseEntity<List<User>>(users.getObject(), users.getHttpStatus());
+		return new ResponseEntity<Response<User>>(users, users.getHttpStatus());
 	}
 
 	/**
@@ -65,9 +63,9 @@ public class AdminUserController {
 	 */
 	@ApiOperation(value = "View Particular User", notes = "View a particular user")
 	@RequestMapping(value = "/user/{userId}", method = RequestMethod.POST)
-	public ResponseEntity<List<Object>> viewUser(@PathVariable String userId) {
+	public ResponseEntity<Response<Object>> viewUser(@PathVariable String userId) {
 		Response<Object> result = adminService.viewUser(userId);
-		return new ResponseEntity<List<Object>>(result.getObject(), result.getHttpStatus());
+		return new ResponseEntity<Response<Object>>(result, result.getHttpStatus());
 	}
 
 }

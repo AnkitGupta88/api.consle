@@ -61,6 +61,7 @@ public class AdminRequestImpl implements AdminRequest {
 		Response<WebServiceRequests> response = new Response<>();
 		response.setObject(requestRepository.findAll());
 		response.setHttpStatus(HttpStatus.OK);
+		response.setMessage("Request Completed");
 		return response;
 	}
 
@@ -76,7 +77,8 @@ public class AdminRequestImpl implements AdminRequest {
 			Plan plan = planRepository.findByPlanId(UUID.fromString(webServiceRequest.getSubscription()));
 			if(plan==null)
 			{
-				response.setObject(Arrays.asList("No such plan exists"));
+				response.setObject(Arrays.asList());
+				response.setMessage("No such plan exists");
 				response.setHttpStatus(HttpStatus.BAD_REQUEST);
 			}
 			else
@@ -104,8 +106,6 @@ public class AdminRequestImpl implements AdminRequest {
 			User user = repository.findOne(webServiceRequest.getUserId());
 			WebService webService = new WebService();
 			webService.setName(webServiceRequest.getServiceName());
-			// webService.setUrl("http://" + KONGUSER + "/" +
-			// webService.getName() + "?apikey=" + user.getKey());
 			webService.setUrl(apiConfig.getUserUrl() + "/" + webService.getName());
 			List<WebService> webServiceList = user.getWebServices();
 			if (webServiceList == null) {
@@ -116,6 +116,7 @@ public class AdminRequestImpl implements AdminRequest {
 			repository.save(user);
 			response.setObject(Arrays.asList(id.toString()));
 			response.setHttpStatus(HttpStatus.OK);
+			response.setMessage("Request Completed");
 			}
 			return response;
 	}

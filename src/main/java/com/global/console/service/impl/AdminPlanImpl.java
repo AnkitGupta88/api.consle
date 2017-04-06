@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import com.datastax.driver.core.utils.UUIDs;
 import com.global.console.dao.impl.PlanDaoImpl;
 import com.global.console.dto.PlanDetails;
+import com.global.console.dto.SubscriptionConfig;
 import com.global.console.model.Plan;
 import com.global.console.response.Response;
 import com.global.console.service.AdminPlan;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class AdminPlanImpl.
  */
@@ -35,9 +35,18 @@ public class AdminPlanImpl implements AdminPlan {
 	@Override
 	public Response<Plan> createPlan(PlanDetails planDetails) {
 		UUID planId = UUIDs.timeBased();
+		SubscriptionConfig config = SubscriptionConfig.getConfigType(planDetails.getConfigType());
 		Response<Plan> response = new Response<>();
-		response.setObject(Arrays.asList(planDaoImpl.createPlan(planDetails, planId)));
-		response.setHttpStatus(HttpStatus.OK);
+		if (config != null) {
+			planDetails.setConfigType(config.getConfigType());
+			response.setObject(Arrays.asList(planDaoImpl.createPlan(planDetails, planId)));
+			response.setHttpStatus(HttpStatus.OK);
+			response.setMessage("Request Completed");
+		} else {
+			response.setObject(Arrays.asList());
+			response.setMessage("Invalid Config type entered");
+			response.setHttpStatus(HttpStatus.BAD_REQUEST);
+		}
 		return response;
 	}
 
@@ -51,6 +60,7 @@ public class AdminPlanImpl implements AdminPlan {
 		Response<Plan> listPlan = new Response<>();
 		listPlan.setObject(planDaoImpl.findAll());
 		listPlan.setHttpStatus(HttpStatus.OK);
+		listPlan.setMessage("Request Completed");
 		return listPlan;
 	}
 
@@ -64,6 +74,7 @@ public class AdminPlanImpl implements AdminPlan {
 		Response<Plan> response = new Response<>();
 		response.setObject(Arrays.asList(planDaoImpl.editPlan(planId, planDetails)));
 		response.setHttpStatus(HttpStatus.OK);
+		response.setMessage("Request Completed");
 		return response;
 	}
 
@@ -77,6 +88,7 @@ public class AdminPlanImpl implements AdminPlan {
 		Response<String> response = new Response<>();
 		response.setObject(Arrays.asList(planDaoImpl.deletePlan(planId).toString()));
 		response.setHttpStatus(HttpStatus.OK);
+		response.setMessage("Request Completed");
 		return response;
 	}
 

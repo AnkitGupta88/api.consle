@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Response.
  *
@@ -18,6 +17,28 @@ public class Response<T> {
 
 	/** The http status. */
 	private HttpStatus httpStatus;
+
+	/** The message. */
+	private String message;
+
+	/**
+	 * Gets the message.
+	 *
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
+	}
+
+	/**
+	 * Sets the message.
+	 *
+	 * @param message
+	 *            the new message
+	 */
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
 	/**
 	 * Gets the http status.

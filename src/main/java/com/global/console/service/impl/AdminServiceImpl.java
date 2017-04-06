@@ -3,10 +3,10 @@ package com.global.console.service.impl;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.global.console.configuration.ApiConfiguration;
 import com.global.console.dao.impl.UserDaoImpl;
 import com.global.console.dto.ServiceRegister;
-import com.global.console.response.Result;
+import com.global.console.response.Response;
 import com.global.console.service.AdminService;
 import com.global.console.utils.ApiConstants;
 import com.global.console.utils.ServiceUrlBuilderParams;
@@ -46,76 +46,22 @@ public class AdminServiceImpl implements AdminService {
 	 * @see com.global.console.service.AdminService#viewServices()
 	 */
 	@Override
-	public JSONArray viewServices() {
+	public Response<Object> viewServices() {
 		String url = null;
 		String response = null;
+		Response<Object> finalResponse = new Response<>();
 		url = apiConfig.getAdminUrl() + "/apis";
 		try {
 			response = getRequest(url, null, String.class);
+			finalResponse.setObject(Arrays.asList(((JSONObject) JSONValue.parse(response)).get("data")));
+			finalResponse.setMessage("Request Completed");
+			finalResponse.setHttpStatus(HttpStatus.OK);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
+			finalResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+			finalResponse.setMessage("Unable to process");
 		}
-		JSONObject json = (JSONObject) JSONValue.parse(response);
-		JSONArray data = (JSONArray) json.get("data");
-		return data;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.global.console.service.AdminService#addService(java.lang.String)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public JSONObject addService(String inputParams) {
-
-		Map<String, Object> inputs = null;
-		try {
-			inputs = getInputParamsClass(inputParams, Map.class);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-
-		String name = (String) inputs.get("name");
-		String upstream_url = (String) inputs.get("upstream_url");
-		String request_host = (String) inputs.get("request_host");
-
-		Map<String, String> params = new HashMap<>();
-		String url;
-		String response = null;
-		try {
-			params.put("name", name);
-			params.put("upstream_url", upstream_url);
-			params.put("request_host", request_host);
-			params.put("request_path", "/" + name);
-			params.put("strip_request_path", "true");
-			url = apiConfig.getAdminUrl() + "/apis/";
-			response = postRequest(url, params, String.class);
-
-			params.clear();
-			params.put("name", "key-auth");
-			url = apiConfig.getAdminUrl() + "/apis/" + name + "/plugins/";
-			postRequest(url, params, String.class);
-
-			params.clear();
-			params.put("name", "rate-limiting");
-			params.put("config.second", "0");
-			url = apiConfig.getAdminUrl() + "/apis/" + name + "/plugins/";
-			postRequest(url, params, String.class);
-
-			params.clear();
-			params.put("name", "acl");
-			params.put("config.whitelist", name);
-			url = apiConfig.getAdminUrl() + "/apis/" + name + "/plugins/";
-			postRequest(url, params, String.class);
-
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-
-		JSONObject json = (JSONObject) JSONValue.parse(response);
-
-		return json;
+		return finalResponse;
 	}
 
 	/*
@@ -125,17 +71,22 @@ public class AdminServiceImpl implements AdminService {
 	 * com.global.console.service.AdminService#deleteService(java.lang.String)
 	 */
 	@Override
-	public String deleteService(String serviceName) {
+	public Response<String> deleteService(String serviceName) {
+		Response<String> finalResponse = new Response<>();
 
 		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName;
 		try {
 			deleteRequest(url);
+			finalResponse.setObject(Arrays.asList(serviceName));
+			finalResponse.setMessage("Request Completed");
+			finalResponse.setHttpStatus(HttpStatus.OK);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			serviceName = null;
+			finalResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+			finalResponse.setMessage("Unable to process");
 		}
 
-		return serviceName;
+		return finalResponse;
 	}
 
 	/*
@@ -145,16 +96,21 @@ public class AdminServiceImpl implements AdminService {
 	 * com.global.console.service.AdminService#viewService(java.lang.String)
 	 */
 	@Override
-	public JSONObject viewService(String serviceName) {
+	public Response<Object> viewService(String serviceName) {
+		Response<Object> finalResponse = new Response<>();
 		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName;
 		String response = null;
 		try {
 			response = getRequest(url, null, String.class);
+			finalResponse.setObject(Arrays.asList((JSONObject) JSONValue.parse(response)));
+			finalResponse.setMessage("Request Completed");
+			finalResponse.setHttpStatus(HttpStatus.OK);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
+			finalResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+			finalResponse.setMessage("Unable to process");
 		}
-		JSONObject res = (JSONObject) JSONValue.parse(response);
-		return res;
+		return finalResponse;
 	}
 
 	/*
@@ -165,15 +121,20 @@ public class AdminServiceImpl implements AdminService {
 	 * java.lang.String)
 	 */
 	@Override
-	public String deletePlugins(String serviceName, String id) {
+	public Response<String> deletePlugins(String serviceName, String id) {
+		Response<String> finalResponse = new Response<>();
 		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName + "/plugins/" + id;
 		try {
 			deleteRequest(url);
+			finalResponse.setObject(Arrays.asList(serviceName));
+			finalResponse.setMessage("Request Completed");
+			finalResponse.setHttpStatus(HttpStatus.OK);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			serviceName = null;
+			finalResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+			finalResponse.setMessage("Unable to process");
 		}
-		return serviceName;
+		return finalResponse;
 	}
 
 	/*
@@ -183,16 +144,21 @@ public class AdminServiceImpl implements AdminService {
 	 * com.global.console.service.AdminService#viewPlugins(java.lang.String)
 	 */
 	@Override
-	public JSONArray viewPlugins(String serviceName) {
+	public Response<Object> viewPlugins(String serviceName) {
+		Response<Object> finalResponse = new Response<>();
 		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName + "/plugins";
 		String response = null;
 		try {
 			response = getRequest(url, null, String.class);
+			finalResponse.setObject(Arrays.asList(((JSONObject) JSONValue.parse(response)).get("data")));
+			finalResponse.setMessage("Request Completed");
+			finalResponse.setHttpStatus(HttpStatus.OK);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
+			finalResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+			finalResponse.setMessage("Unable to process");
 		}
-		JSONObject res = (JSONObject) JSONValue.parse(response);
-		return (JSONArray) res.get("data");
+		return finalResponse;
 	}
 
 	/**
@@ -281,15 +247,16 @@ public class AdminServiceImpl implements AdminService {
 	 * console.dto.ServiceRegister)
 	 */
 	@Override
-	public Result registerService(ServiceRegister service) {
-		Result result = new Result();
+	public Response<String> registerService(ServiceRegister service) {
+		Response<String> finalResponse = new Response<>();
 		try {
 			String url = apiConfig.getAdminUrl() + "/" + ApiConstants.APIS + "/";
 			Map<String, String> serviceParams = ServiceUrlBuilderParams.registerServiceBuilderParams(service);
 			String response = postRequest(url, serviceParams, String.class);
-			result.setResponseCode(HttpStatus.OK);
-			result.setResponseMsg(response);
-			
+			finalResponse.setObject(Arrays.asList(response));
+			finalResponse.setMessage("Request Completed");
+			finalResponse.setHttpStatus(HttpStatus.OK);
+
 			serviceParams.clear();
 			serviceParams.put("name", "key-auth");
 			url = apiConfig.getAdminUrl() + "/apis/" + service.getServiceName() + "/plugins/";
@@ -306,11 +273,13 @@ public class AdminServiceImpl implements AdminService {
 			serviceParams.put("config.whitelist", service.getServiceName());
 			url = apiConfig.getAdminUrl() + "/apis/" + service.getServiceName() + "/plugins/";
 			postRequest(url, serviceParams, String.class);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
+			finalResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+			finalResponse.setMessage("Unable to process");
 		}
-		return result;
+		return finalResponse;
 	}
 
 }

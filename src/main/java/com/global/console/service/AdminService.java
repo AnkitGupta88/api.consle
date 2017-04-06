@@ -1,52 +1,64 @@
 package com.global.console.service;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
 import com.global.console.dto.ServiceRegister;
-import com.global.console.response.Result;
+import com.global.console.response.Response;
 
 /**
  * The Interface AdminService.
  */
 public interface AdminService {
 
-	
 	/**
 	 * View services.
 	 *
-	 * @return the JSON array
+	 * @return the response
 	 */
-	public JSONArray viewServices();
-	
+	public Response<Object> viewServices();
 
-	/**
-	 * Adds the service.
-	 *
-	 * @param inputParams the input params
-	 * @return the JSON object
-	 */
-	public JSONObject addService(String inputParams);
-	
 	/**
 	 * Register service.
 	 *
-	 * @param service the service
-	 * @return the result
+	 * @param service
+	 *            the service
+	 * @return the response
 	 */
-	public Result registerService(ServiceRegister service);
-	
+	public Response<String> registerService(ServiceRegister service);
+
 	/**
 	 * Delete service.
 	 *
-	 * @param serviceName the service name
-	 * @return the string
+	 * @param serviceName
+	 *            the service name
+	 * @return the response
 	 */
-	public String deleteService(String serviceName);
+	public Response<String> deleteService(String serviceName);
 
-	public JSONObject viewService(String serviceName);
+	/**
+	 * View service.
+	 *
+	 * @param serviceName
+	 *            the service name
+	 * @return the response
+	 */
+	public Response<Object> viewService(String serviceName);
 
-	public String deletePlugins(String serviceName, String id);
+	/**
+	 * Delete plugins.
+	 *
+	 * @param serviceName
+	 *            the service name
+	 * @param id
+	 *            the id
+	 * @return the response
+	 */
+	public Response<String> deletePlugins(String serviceName, String id);
 
-	public JSONArray viewPlugins(String serviceName);
+	/**
+	 * View plugins.
+	 *
+	 * @param serviceName
+	 *            the service name
+	 * @return the response
+	 */
+	public Response<Object> viewPlugins(String serviceName);
 }

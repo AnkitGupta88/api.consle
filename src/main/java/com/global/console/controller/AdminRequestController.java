@@ -1,7 +1,5 @@
 package com.global.console.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,9 +35,9 @@ public class AdminRequestController {
 	 */
 	@ApiOperation(value = "Grant Access", notes = "Grant access to a Web Services")
 	@RequestMapping(value = "/request/grant", method = RequestMethod.POST)
-	public ResponseEntity<List<String>> grantAccess(@RequestParam String requestId) {
+	public ResponseEntity<Response<String>> grantAccess(@RequestParam String requestId) {
 		Response<String> response = adminService.grantService(requestId);
-		return new ResponseEntity<List<String>>(response.getObject(), response.getHttpStatus());
+		return new ResponseEntity<Response<String>>(response, response.getHttpStatus());
 	}
 
 	/**
@@ -49,9 +47,9 @@ public class AdminRequestController {
 	 */
 	@ApiOperation(value = "View Requests", notes = "View All Requests")
 	@RequestMapping(value = "/request", method = RequestMethod.GET)
-	public ResponseEntity<List<WebServiceRequests>> viewRequests() {
+	public ResponseEntity<Response<WebServiceRequests>> viewRequests() {
 		Response<WebServiceRequests> response = adminService.viewRequests();
-		return new ResponseEntity<List<WebServiceRequests>>(response.getObject(), response.getHttpStatus());
+		return new ResponseEntity<Response<WebServiceRequests>>(response, response.getHttpStatus());
 	}
 
 }

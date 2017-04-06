@@ -1,9 +1,6 @@
 package com.global.console.controller;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,14 +10,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.global.console.dto.ServiceRegister;
-import com.global.console.response.Result;
+import com.global.console.response.Response;
 import com.global.console.service.AdminService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+// TODO: Auto-generated Javadoc
 /**
- * The Class AdminController.
+ * The Class AdminServiceController.
  */
 @RestController
 @Api("Admin Controller")
@@ -38,13 +36,13 @@ public class AdminServiceController {
 	 */
 	@ApiOperation(value = "View Web Services", notes = "View all Web Services")
 	@RequestMapping(value = "/services", method = RequestMethod.GET)
-	public ResponseEntity<JSONArray> viewServices() {
-		JSONArray webServices = adminService.viewServices();
-		return new ResponseEntity<JSONArray>(webServices, HttpStatus.OK);
+	public ResponseEntity<Response<Object>> viewServices() {
+		Response<Object> webServices = adminService.viewServices();
+		return new ResponseEntity<Response<Object>>(webServices, webServices.getHttpStatus());
 	}
 
 	/**
-	 * View services.
+	 * View service.
 	 *
 	 * @param serviceName
 	 *            the service name
@@ -52,13 +50,13 @@ public class AdminServiceController {
 	 */
 	@ApiOperation(value = "View Web Services", notes = "View a particular Web Service")
 	@RequestMapping(value = "/services/{serviceName}", method = RequestMethod.GET)
-	public ResponseEntity<JSONObject> viewService(@PathVariable String serviceName) {
-		JSONObject webService = adminService.viewService(serviceName);
-		return new ResponseEntity<JSONObject>(webService, HttpStatus.OK);
+	public ResponseEntity<Response<Object>> viewService(@PathVariable String serviceName) {
+		Response<Object> webService = adminService.viewService(serviceName);
+		return new ResponseEntity<Response<Object>>(webService, webService.getHttpStatus());
 	}
 
 	/**
-	 * View services.
+	 * View plugins.
 	 *
 	 * @param serviceName
 	 *            the service name
@@ -66,9 +64,9 @@ public class AdminServiceController {
 	 */
 	@ApiOperation(value = "View Web Service Plugins", notes = "View Web Service plugins")
 	@RequestMapping(value = "/services/{serviceName}/plugins", method = RequestMethod.GET)
-	public ResponseEntity<JSONArray> viewPlugins(@PathVariable String serviceName) {
-		JSONArray plugins = adminService.viewPlugins(serviceName);
-		return new ResponseEntity<JSONArray>(plugins, HttpStatus.OK);
+	public ResponseEntity<Response<Object>> viewPlugins(@PathVariable String serviceName) {
+		Response<Object> plugins = adminService.viewPlugins(serviceName);
+		return new ResponseEntity<Response<Object>>(plugins, plugins.getHttpStatus());
 	}
 
 	/**
@@ -82,13 +80,13 @@ public class AdminServiceController {
 	 */
 	@ApiOperation(value = "Delete Web Service Plugin", notes = "Delet Web Service plugin")
 	@RequestMapping(value = "/services/{serviceName}/plugins/delete", method = RequestMethod.DELETE)
-	public ResponseEntity<String> deletePlugins(@PathVariable String serviceName, @RequestParam String id) {
-		String plugins = adminService.deletePlugins(serviceName, id);
-		return new ResponseEntity<String>(plugins, HttpStatus.OK);
+	public ResponseEntity<Response<String>> deletePlugins(@PathVariable String serviceName, @RequestParam String id) {
+		Response<String> plugins = adminService.deletePlugins(serviceName, id);
+		return new ResponseEntity<Response<String>>(plugins, plugins.getHttpStatus());
 	}
 
 	/**
-	 * View services.
+	 * Delete service.
 	 *
 	 * @param serviceName
 	 *            the service name
@@ -96,24 +94,24 @@ public class AdminServiceController {
 	 */
 	@ApiOperation(value = "Delete Web Services", notes = "Delete a Web Services")
 	@RequestMapping(value = "/services/{serviceName}/delete", method = RequestMethod.DELETE)
-	public ResponseEntity<String> deleteService(@PathVariable String serviceName) {
-		String webServiceName = adminService.deleteService(serviceName);
-		return new ResponseEntity<String>(webServiceName, HttpStatus.OK);
+	public ResponseEntity<Response<String>> deleteService(@PathVariable String serviceName) {
+		Response<String> webServiceName = adminService.deleteService(serviceName);
+		return new ResponseEntity<Response<String>>(webServiceName, webServiceName.getHttpStatus());
 	}
 
 	/**
-	 * Adds the service.
+	 * Register service.
 	 *
-	 * @param inputParams
-	 *            the input params
+	 * @param serviceDetail
+	 *            the service detail
 	 * @return the response entity
 	 */
 	@ApiOperation(value = "Register API", notes = "Register new API")
 	@RequestMapping(value = "/services/register", method = RequestMethod.POST)
-	public ResponseEntity<Result> registerService(@RequestBody ServiceRegister serviceDetail) {
+	public ResponseEntity<Response<String>> registerService(@RequestBody ServiceRegister serviceDetail) {
 
-		Result response = adminService.registerService(serviceDetail);
-		return new ResponseEntity<>(response, HttpStatus.OK);
+		Response<String> response = adminService.registerService(serviceDetail);
+		return new ResponseEntity<Response<String>>(response, response.getHttpStatus());
 	}
 
 }

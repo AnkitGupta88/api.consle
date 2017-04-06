@@ -4,7 +4,6 @@ import com.global.console.dto.PlanDetails;
 import com.global.console.model.Plan;
 import com.global.console.response.Response;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface AdminPlan.
  */

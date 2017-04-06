@@ -1,7 +1,5 @@
 package com.global.console.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,23 +37,10 @@ public class UserController {
 	 */
 	@ApiOperation(value = "Request Access", notes = "Request Access for a Web Service")
 	@RequestMapping(value = "/request", method = RequestMethod.POST)
-	public ResponseEntity<List<String>> requestAccess(@RequestBody ServiceRequest serviceRequest) {
+	public ResponseEntity<Response<String>> requestAccess(@RequestBody ServiceRequest serviceRequest) {
 		Response<String> result = userService.requestAccess(serviceRequest);
-		return new ResponseEntity<List<String>>(result.getObject(), result.getHttpStatus());
+		return new ResponseEntity<Response<String>>(result, result.getHttpStatus());
 	}
-
-	/**
-	 * View services.
-	 *
-	 * @return the response entity
-	 */
-	// @ApiOperation(value = "View Accesses", notes = "View all Web Service
-	// accesses")
-	// @RequestMapping(value = "/{userId}/view", method = RequestMethod.POST)
-	// public ResponseEntity<User> viewAccess(@PathVariable String userId) {
-	// User user = userService.viewAccess(userId);
-	// return new ResponseEntity<User>(user, HttpStatus.OK);
-	// }
 
 	/**
 	 * View services.
@@ -64,9 +49,9 @@ public class UserController {
 	 */
 	@ApiOperation(value = "View Web Services", notes = "View all Web Services")
 	@RequestMapping(value = "/services", method = RequestMethod.GET)
-	public ResponseEntity<List<Object>> viewServices() {
+	public ResponseEntity<Response<Object>> viewServices() {
 		Response<Object> webServices = userService.viewServices();
-		return new ResponseEntity<List<Object>>(webServices.getObject(), HttpStatus.OK);
+		return new ResponseEntity<Response<Object>>(webServices, HttpStatus.OK);
 	}
 
 }

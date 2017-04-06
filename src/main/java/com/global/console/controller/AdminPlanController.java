@@ -1,7 +1,5 @@
 package com.global.console.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +27,7 @@ public class AdminPlanController {
 
 	/** The admin plan impl. */
 	@Autowired
-	AdminPlanImpl adminPlanImpl;
+	private AdminPlanImpl adminPlanImpl;
 
 	/**
 	 * Creates the plan.
@@ -40,9 +38,9 @@ public class AdminPlanController {
 	 */
 	@ApiOperation(value = "Create Plan", notes = "Create a new plan")
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
-	public ResponseEntity<List<Plan>> createPlan(@RequestBody PlanDetails planDetails) {
+	public ResponseEntity<Response<Plan>> createPlan(@RequestBody PlanDetails planDetails) {
 		Response<Plan> response = adminPlanImpl.createPlan(planDetails);
-		return new ResponseEntity<List<Plan>>(response.getObject(), response.getHttpStatus());
+		return new ResponseEntity<Response<Plan>>(response, response.getHttpStatus());
 	}
 
 	/**
@@ -52,9 +50,9 @@ public class AdminPlanController {
 	 */
 	@ApiOperation(value = "View Plans", notes = "View all the plans")
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ResponseEntity<List<Plan>> viewPlans() {
+	public ResponseEntity<Response<Plan>> viewPlans() {
 		Response<Plan> plans = adminPlanImpl.viewAllPlans();
-		return new ResponseEntity<List<Plan>>(plans.getObject(), plans.getHttpStatus());
+		return new ResponseEntity<Response<Plan>>(plans, plans.getHttpStatus());
 	}
 
 	/**
@@ -68,9 +66,9 @@ public class AdminPlanController {
 	 */
 	@ApiOperation(value = "Edit Plan", notes = "Edit a plan")
 	@RequestMapping(value = "/{planId}/edit", method = RequestMethod.POST)
-	public ResponseEntity<List<Plan>> editPlan(@PathVariable String planId, @RequestBody PlanDetails planDetails) {
+	public ResponseEntity<Response<Plan>> editPlan(@PathVariable String planId, @RequestBody PlanDetails planDetails) {
 		Response<Plan> result = adminPlanImpl.editPlan(planId, planDetails);
-		return new ResponseEntity<List<Plan>>(result.getObject(), result.getHttpStatus());
+		return new ResponseEntity<Response<Plan>>(result, result.getHttpStatus());
 	}
 
 	/**
@@ -82,9 +80,9 @@ public class AdminPlanController {
 	 */
 	@ApiOperation(value = "Delete Plan", notes = "Delete a plan")
 	@RequestMapping(value = "/{planId}", method = RequestMethod.DELETE)
-	public ResponseEntity<List<String>> addUser(@PathVariable String planId) {
+	public ResponseEntity<Response<String>> addUser(@PathVariable String planId) {
 		Response<String> result = adminPlanImpl.deletePlan(planId);
-		return new ResponseEntity<List<String>>(result.getObject(), result.getHttpStatus());
+		return new ResponseEntity<Response<String>>(result, result.getHttpStatus());
 	}
 
 }

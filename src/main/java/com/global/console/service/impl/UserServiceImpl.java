@@ -51,6 +51,7 @@ public class UserServiceImpl implements UserService {
 		Response<String> response = new Response<>();
 		response.setObject(Arrays.asList(id.toString()));
 		response.setHttpStatus(HttpStatus.OK);
+		response.setMessage("Request Completed");
 		return response;
 	}
 
@@ -64,6 +65,7 @@ public class UserServiceImpl implements UserService {
 		Response<User> response = new Response<>();
 		response.setObject(Arrays.asList(userRepository.findById(userId)));
 		response.setHttpStatus(HttpStatus.OK);
+		response.setMessage("Request Completed");
 		return response;
 	}
 
@@ -80,12 +82,15 @@ public class UserServiceImpl implements UserService {
 		url = apiConfig.getAdminUrl() + "/apis";
 		try {
 			response = getRequest(url, null, String.class);
+			JSONObject json = (JSONObject) JSONValue.parse(response);
+			finalResponse.setObject(Arrays.asList(json.get("data")));
+			finalResponse.setHttpStatus(HttpStatus.OK);
+			finalResponse.setMessage("Request Completed");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
+			finalResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+			finalResponse.setMessage("Unable to process");
 		}
-		JSONObject json = (JSONObject) JSONValue.parse(response);
-		finalResponse.setObject(Arrays.asList(json.get("data")));
-		finalResponse.setHttpStatus(HttpStatus.OK);
 		return finalResponse;
 	}
 

@@ -23,7 +23,7 @@ import com.global.console.utils.ApiConstants;
 import com.global.console.utils.ServiceUrlBuilderParams;
 
 /**
- * The Class AdminServiceImpl.
+ * The Class AdminUserImpl.
  */
 @Service
 public class AdminUserImpl implements AdminUser {
@@ -68,8 +68,12 @@ public class AdminUserImpl implements AdminUser {
 
 			finalResponse.setObject(Arrays.asList(id));
 			finalResponse.setHttpStatus(HttpStatus.OK);
+			finalResponse.setMessage("Request Completed");
+
 		} catch (Exception e) {
 			e.printStackTrace();
+			finalResponse.setMessage("Unable to process");
+			finalResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
 		}
 
 		return finalResponse;
@@ -85,6 +89,7 @@ public class AdminUserImpl implements AdminUser {
 		Response<User> response = new Response<>();
 		response.setObject(userDaoImpl.findAll());
 		response.setHttpStatus(HttpStatus.OK);
+		response.setMessage("Request Completed");
 		return response;
 	}
 
@@ -103,27 +108,14 @@ public class AdminUserImpl implements AdminUser {
 			requestResponse = getRequest(url, null, String.class);
 			response.setObject(Arrays.asList(((JSONObject) JSONValue.parse(requestResponse)).get("data")));
 			response.setHttpStatus(HttpStatus.OK);
+			response.setMessage("Request Completed");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
+			response.setHttpStatus(HttpStatus.BAD_REQUEST);
+			response.setMessage("Unable to process");
 		}
 		return response;
 	}
-
-	/**
-	 * Gets the input params class.
-	 *
-	 * @param <T>
-	 *            the generic type
-	 * @param url
-	 *            the url
-	 * @param params
-	 *            the params
-	 * @param t
-	 *            the t
-	 * @return the input params class
-	 * @throws URISyntaxException
-	 *             the URI syntax exception
-	 */
 
 	/**
 	 * Gets the request.
@@ -138,6 +130,7 @@ public class AdminUserImpl implements AdminUser {
 	 *            the t
 	 * @return the request
 	 * @throws URISyntaxException
+	 *             the URI syntax exception
 	 */
 	private <T> T getRequest(String url, Map<String, String> params, Class<T> t) throws URISyntaxException {
 		RestTemplate restTemplate = new RestTemplate();
