@@ -53,7 +53,7 @@ public class AdminServiceImpl implements AdminService {
 		url = apiConfig.getAdminUrl() + "/apis";
 		try {
 			response = getRequest(url, null, String.class);
-			finalResponse.setObject(Arrays.asList(((JSONObject) JSONValue.parse(response)).get("data")));
+			finalResponse.setResults(Arrays.asList(((JSONObject) JSONValue.parse(response)).get("data")));
 			finalResponse.setMessage("Request Completed");
 			finalResponse.setHttpStatus(HttpStatus.OK);
 		} catch (URISyntaxException e) {
@@ -77,7 +77,7 @@ public class AdminServiceImpl implements AdminService {
 		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName;
 		try {
 			deleteRequest(url);
-			finalResponse.setObject(Arrays.asList(serviceName));
+			finalResponse.setResults(Arrays.asList(serviceName));
 			finalResponse.setMessage("Request Completed");
 			finalResponse.setHttpStatus(HttpStatus.OK);
 		} catch (URISyntaxException e) {
@@ -102,7 +102,7 @@ public class AdminServiceImpl implements AdminService {
 		String response = null;
 		try {
 			response = getRequest(url, null, String.class);
-			finalResponse.setObject(Arrays.asList((JSONObject) JSONValue.parse(response)));
+			finalResponse.setResults(Arrays.asList((JSONObject) JSONValue.parse(response)));
 			finalResponse.setMessage("Request Completed");
 			finalResponse.setHttpStatus(HttpStatus.OK);
 		} catch (URISyntaxException e) {
@@ -126,7 +126,7 @@ public class AdminServiceImpl implements AdminService {
 		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName + "/plugins/" + id;
 		try {
 			deleteRequest(url);
-			finalResponse.setObject(Arrays.asList(serviceName));
+			finalResponse.setResults(Arrays.asList(serviceName));
 			finalResponse.setMessage("Request Completed");
 			finalResponse.setHttpStatus(HttpStatus.OK);
 		} catch (URISyntaxException e) {
@@ -150,7 +150,7 @@ public class AdminServiceImpl implements AdminService {
 		String response = null;
 		try {
 			response = getRequest(url, null, String.class);
-			finalResponse.setObject(Arrays.asList(((JSONObject) JSONValue.parse(response)).get("data")));
+			finalResponse.setResults(Arrays.asList(((JSONObject) JSONValue.parse(response)).get("data")));
 			finalResponse.setMessage("Request Completed");
 			finalResponse.setHttpStatus(HttpStatus.OK);
 		} catch (URISyntaxException e) {
@@ -253,7 +253,7 @@ public class AdminServiceImpl implements AdminService {
 			String url = apiConfig.getAdminUrl() + "/" + ApiConstants.APIS + "/";
 			Map<String, String> serviceParams = ServiceUrlBuilderParams.registerServiceBuilderParams(service);
 			String response = postRequest(url, serviceParams, String.class);
-			finalResponse.setObject(Arrays.asList(response));
+			finalResponse.setResults(Arrays.asList(response));
 			finalResponse.setMessage("Request Completed");
 			finalResponse.setHttpStatus(HttpStatus.OK);
 

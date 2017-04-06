@@ -26,7 +26,6 @@ import com.global.console.repository.UserRepository;
 import com.global.console.response.Response;
 import com.global.console.service.AdminRequest;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class AdminServiceImpl.
  */
@@ -51,7 +50,7 @@ public class AdminRequestImpl implements AdminRequest {
 	
 	/** The user dao impl. */
 	@Autowired
-	UserDaoImpl userDaoImpl;
+	private UserDaoImpl userDaoImpl;
 
 	/* (non-Javadoc)
 	 * @see com.global.console.service.AdminRequest#viewRequests()
@@ -59,7 +58,7 @@ public class AdminRequestImpl implements AdminRequest {
 	@Override
 	public Response<WebServiceRequests> viewRequests() {
 		Response<WebServiceRequests> response = new Response<>();
-		response.setObject(requestRepository.findAll());
+		response.setResults(requestRepository.findAll());
 		response.setHttpStatus(HttpStatus.OK);
 		response.setMessage("Request Completed");
 		return response;
@@ -77,7 +76,7 @@ public class AdminRequestImpl implements AdminRequest {
 			Plan plan = planRepository.findByPlanId(UUID.fromString(webServiceRequest.getSubscription()));
 			if(plan==null)
 			{
-				response.setObject(Arrays.asList());
+				response.setResults(Arrays.asList());
 				response.setMessage("No such plan exists");
 				response.setHttpStatus(HttpStatus.BAD_REQUEST);
 			}
@@ -114,7 +113,7 @@ public class AdminRequestImpl implements AdminRequest {
 			webServiceList.add(webService);
 			user.setWebServices(webServiceList);
 			repository.save(user);
-			response.setObject(Arrays.asList(id.toString()));
+			response.setResults(Arrays.asList(id.toString()));
 			response.setHttpStatus(HttpStatus.OK);
 			response.setMessage("Request Completed");
 			}

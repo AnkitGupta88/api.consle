@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
 	public Response<String> requestAccess(ServiceRequest serviceRequest) {
 		UUID id = requestsDaoImpl.createServiceRequest(serviceRequest);
 		Response<String> response = new Response<>();
-		response.setObject(Arrays.asList(id.toString()));
+		response.setResults(Arrays.asList(id.toString()));
 		response.setHttpStatus(HttpStatus.OK);
 		response.setMessage("Request Completed");
 		return response;
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Response<User> viewAccess(String userId) {
 		Response<User> response = new Response<>();
-		response.setObject(Arrays.asList(userRepository.findById(userId)));
+		response.setResults(Arrays.asList(userRepository.findById(userId)));
 		response.setHttpStatus(HttpStatus.OK);
 		response.setMessage("Request Completed");
 		return response;
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
 		try {
 			response = getRequest(url, null, String.class);
 			JSONObject json = (JSONObject) JSONValue.parse(response);
-			finalResponse.setObject(Arrays.asList(json.get("data")));
+			finalResponse.setResults(Arrays.asList(json.get("data")));
 			finalResponse.setHttpStatus(HttpStatus.OK);
 			finalResponse.setMessage("Request Completed");
 		} catch (URISyntaxException e) {

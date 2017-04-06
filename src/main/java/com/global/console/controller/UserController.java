@@ -15,7 +15,6 @@ import com.global.console.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class UserController.
  */

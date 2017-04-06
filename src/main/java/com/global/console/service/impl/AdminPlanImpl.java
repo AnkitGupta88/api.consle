@@ -39,11 +39,11 @@ public class AdminPlanImpl implements AdminPlan {
 		Response<Plan> response = new Response<>();
 		if (config != null) {
 			planDetails.setConfigType(config.getConfigType());
-			response.setObject(Arrays.asList(planDaoImpl.createPlan(planDetails, planId)));
+			response.setResults(Arrays.asList(planDaoImpl.createPlan(planDetails, planId)));
 			response.setHttpStatus(HttpStatus.OK);
 			response.setMessage("Request Completed");
 		} else {
-			response.setObject(Arrays.asList());
+			response.setResults(Arrays.asList());
 			response.setMessage("Invalid Config type entered");
 			response.setHttpStatus(HttpStatus.BAD_REQUEST);
 		}
@@ -58,7 +58,7 @@ public class AdminPlanImpl implements AdminPlan {
 	@Override
 	public Response<Plan> viewAllPlans() {
 		Response<Plan> listPlan = new Response<>();
-		listPlan.setObject(planDaoImpl.findAll());
+		listPlan.setResults(planDaoImpl.findAll());
 		listPlan.setHttpStatus(HttpStatus.OK);
 		listPlan.setMessage("Request Completed");
 		return listPlan;
@@ -72,7 +72,7 @@ public class AdminPlanImpl implements AdminPlan {
 	@Override
 	public Response<Plan> editPlan(String planId, PlanDetails planDetails) {
 		Response<Plan> response = new Response<>();
-		response.setObject(Arrays.asList(planDaoImpl.editPlan(planId, planDetails)));
+		response.setResults(Arrays.asList(planDaoImpl.editPlan(planId, planDetails)));
 		response.setHttpStatus(HttpStatus.OK);
 		response.setMessage("Request Completed");
 		return response;
@@ -86,7 +86,7 @@ public class AdminPlanImpl implements AdminPlan {
 	@Override
 	public Response<String> deletePlan(String planId) {
 		Response<String> response = new Response<>();
-		response.setObject(Arrays.asList(planDaoImpl.deletePlan(planId).toString()));
+		response.setResults(Arrays.asList(planDaoImpl.deletePlan(planId).toString()));
 		response.setHttpStatus(HttpStatus.OK);
 		response.setMessage("Request Completed");
 		return response;

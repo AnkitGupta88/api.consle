@@ -16,7 +16,6 @@ import com.global.console.service.impl.AdminPlanImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class AdminPlanController.
  */
@@ -40,7 +39,7 @@ public class AdminPlanController {
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public ResponseEntity<Response<Plan>> createPlan(@RequestBody PlanDetails planDetails) {
 		Response<Plan> response = adminPlanImpl.createPlan(planDetails);
-		return new ResponseEntity<Response<Plan>>(response, response.getHttpStatus());
+		return new ResponseEntity<>(response, response.getHttpStatus());
 	}
 
 	/**
@@ -52,7 +51,7 @@ public class AdminPlanController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ResponseEntity<Response<Plan>> viewPlans() {
 		Response<Plan> plans = adminPlanImpl.viewAllPlans();
-		return new ResponseEntity<Response<Plan>>(plans, plans.getHttpStatus());
+		return new ResponseEntity<>(plans, plans.getHttpStatus());
 	}
 
 	/**
@@ -68,7 +67,7 @@ public class AdminPlanController {
 	@RequestMapping(value = "/{planId}/edit", method = RequestMethod.POST)
 	public ResponseEntity<Response<Plan>> editPlan(@PathVariable String planId, @RequestBody PlanDetails planDetails) {
 		Response<Plan> result = adminPlanImpl.editPlan(planId, planDetails);
-		return new ResponseEntity<Response<Plan>>(result, result.getHttpStatus());
+		return new ResponseEntity<>(result, result.getHttpStatus());
 	}
 
 	/**
@@ -82,7 +81,7 @@ public class AdminPlanController {
 	@RequestMapping(value = "/{planId}", method = RequestMethod.DELETE)
 	public ResponseEntity<Response<String>> addUser(@PathVariable String planId) {
 		Response<String> result = adminPlanImpl.deletePlan(planId);
-		return new ResponseEntity<Response<String>>(result, result.getHttpStatus());
+		return new ResponseEntity<>(result, result.getHttpStatus());
 	}
 
 }

@@ -66,7 +66,7 @@ public class AdminUserImpl implements AdminUser {
 
 			userDaoImpl.addUser(user, id, key);
 
-			finalResponse.setObject(Arrays.asList(id));
+			finalResponse.setResults(Arrays.asList(id));
 			finalResponse.setHttpStatus(HttpStatus.OK);
 			finalResponse.setMessage("Request Completed");
 
@@ -87,7 +87,7 @@ public class AdminUserImpl implements AdminUser {
 	@Override
 	public Response<User> viewAllUsers() {
 		Response<User> response = new Response<>();
-		response.setObject(userDaoImpl.findAll());
+		response.setResults(userDaoImpl.findAll());
 		response.setHttpStatus(HttpStatus.OK);
 		response.setMessage("Request Completed");
 		return response;
@@ -101,12 +101,12 @@ public class AdminUserImpl implements AdminUser {
 	@Override
 	public Response<Object> viewUser(String id) {
 		Response<Object> response = new Response<>();
-		response.setObject(Arrays.asList(repository.findById(id)));
+		response.setResults(Arrays.asList(repository.findById(id)));
 		String url = apiConfig.getAdminUrl() + "/" + ApiConstants.plugins + "?" + ApiConstants.consumer_id + "=" + id;
 		String requestResponse = null;
 		try {
 			requestResponse = getRequest(url, null, String.class);
-			response.setObject(Arrays.asList(((JSONObject) JSONValue.parse(requestResponse)).get("data")));
+			response.setResults(Arrays.asList(((JSONObject) JSONValue.parse(requestResponse)).get("data")));
 			response.setHttpStatus(HttpStatus.OK);
 			response.setMessage("Request Completed");
 		} catch (URISyntaxException e) {

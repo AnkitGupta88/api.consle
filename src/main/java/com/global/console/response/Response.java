@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class Response.
  *
@@ -13,7 +14,7 @@ import org.springframework.http.HttpStatus;
 public class Response<T> {
 
 	/** The object. */
-	private List<T> object;
+	private List<T> results;
 
 	/** The http status. */
 	private HttpStatus httpStatus;
@@ -60,22 +61,22 @@ public class Response<T> {
 	}
 
 	/**
-	 * Gets the object.
+	 * Gets the results.
 	 *
-	 * @return the object
+	 * @return the results
 	 */
-	public List<T> getObject() {
-		return object;
+	public List<T> getResults() {
+		return results;
 	}
 
 	/**
-	 * Sets the object.
+	 * Sets the results.
 	 *
-	 * @param object
-	 *            the new object
+	 * @param results
+	 *            the results to set
 	 */
-	public void setObject(List<T> object) {
-		this.object = object;
+	public void setResults(List<T> results) {
+		this.results = results;
 	}
 
 }
