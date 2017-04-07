@@ -1,11 +1,8 @@
 package com.global.console.dao.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,8 +10,8 @@ import com.global.console.dao.PlanDao;
 import com.global.console.dto.PlanDetails;
 import com.global.console.model.Plan;
 import com.global.console.repository.PlanRepository;
+import com.global.console.utils.Utils;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class PlanDaoImpl.
  */
@@ -33,12 +30,10 @@ public class PlanDaoImpl implements PlanDao {
 	 */
 	@Override
 	public Plan createPlan(PlanDetails planDetails, UUID id) {
-		ModelMapper modelMapper = new ModelMapper();
-		Plan plan = modelMapper.map(planDetails, Plan.class);
+		Plan plan = Utils.getObjectMapped(planDetails, Plan.class);
 		plan.setPlanId(id);
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        String createdOn = sdf.format(new Date());
-        plan.setCreatedOn(createdOn);
+		String createdOn = Utils.getCurrentDate();
+		plan.setCreatedOn(createdOn);
 		planRepository.save(plan);
 		return plan;
 	}
@@ -64,12 +59,11 @@ public class PlanDaoImpl implements PlanDao {
 
 		UUID id = UUID.fromString(planId);
 		Plan plan = planRepository.findByPlanId(id);
-		plan.setPlanName(planDetails.getPlanName());
-		plan.setCreatedBy(planDetails.getCreatedBy());
-		plan.setConfigType(planDetails.getConfigType());
-		plan.setConfigQuantity(planDetails.getConfigQuantity());
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        String createdOn = sdf.format(new Date());
+		plan.setPlanName((planDetails.getPlanName()==null?plan.getPlanName():planDetails.getPlanName()));
+		plan.setCreatedBy(planDetails.getCreatedBy()==null?plan.getCreatedBy():planDetails.getCreatedBy());
+		plan.setConfigType(planDetails.getConfigType()==null?plan.getConfigType():planDetails.getConfigType());
+		plan.setConfigQuantity(planDetails.getConfigQuantity()==0?plan.getConfigQuantity():planDetails.getConfigQuantity());
+		String createdOn = Utils.getCurrentDate();
 		plan.setCreatedOn(createdOn);
 		planRepository.save(plan);
 		return plan;

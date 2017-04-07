@@ -38,7 +38,7 @@ public class UserController {
 	@RequestMapping(value = "/request", method = RequestMethod.POST)
 	public ResponseEntity<Response<String>> requestAccess(@RequestBody ServiceRequest serviceRequest) {
 		Response<String> result = userService.requestAccess(serviceRequest);
-		return new ResponseEntity<Response<String>>(result, result.getHttpStatus());
+		return new ResponseEntity<>(result, result.getHttpStatus());
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class UserController {
 	@RequestMapping(value = "/services", method = RequestMethod.GET)
 	public ResponseEntity<Response<Object>> viewServices() {
 		Response<Object> webServices = userService.viewServices();
-		return new ResponseEntity<Response<Object>>(webServices, HttpStatus.OK);
+		return new ResponseEntity<>(webServices, HttpStatus.OK);
 	}
 
 }

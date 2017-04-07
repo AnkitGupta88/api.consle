@@ -14,7 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @org.springframework.context.annotation.Configuration
 public class SwaggerConfiguration {
-	
+
 	/**
 	 * Api.
 	 *

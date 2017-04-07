@@ -37,7 +37,7 @@ public class AdminRequestController {
 	@RequestMapping(value = "/request/grant", method = RequestMethod.POST)
 	public ResponseEntity<Response<String>> grantAccess(@RequestParam String requestId) {
 		Response<String> response = adminService.grantService(requestId);
-		return new ResponseEntity<Response<String>>(response, response.getHttpStatus());
+		return new ResponseEntity<>(response, response.getHttpStatus());
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class AdminRequestController {
 	@RequestMapping(value = "/request", method = RequestMethod.GET)
 	public ResponseEntity<Response<WebServiceRequests>> viewRequests() {
 		Response<WebServiceRequests> response = adminService.viewRequests();
-		return new ResponseEntity<Response<WebServiceRequests>>(response, response.getHttpStatus());
+		return new ResponseEntity<>(response, response.getHttpStatus());
 	}
 
 }

@@ -48,7 +48,7 @@ public class AdminUserImpl implements AdminUser {
 	 */
 	@Override
 	public Response<String> addUser(UserDetail user) {
-		Response<String> finalResponse = new Response<>();
+		Response<String> finalResponse;
 		Map<String, String> params = null;
 		JSONObject response = null;
 		String url = null;
@@ -66,14 +66,11 @@ public class AdminUserImpl implements AdminUser {
 
 			userDaoImpl.addUser(user, id, key);
 
-			finalResponse.setResults(Arrays.asList(id));
-			finalResponse.setHttpStatus(HttpStatus.OK);
-			finalResponse.setMessage("Request Completed");
+			finalResponse = new Response<>(Arrays.asList(id), HttpStatus.OK, "Request Completed");
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			finalResponse.setMessage("Unable to process");
-			finalResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
 		}
 
 		return finalResponse;
@@ -86,10 +83,7 @@ public class AdminUserImpl implements AdminUser {
 	 */
 	@Override
 	public Response<User> viewAllUsers() {
-		Response<User> response = new Response<>();
-		response.setResults(userDaoImpl.findAll());
-		response.setHttpStatus(HttpStatus.OK);
-		response.setMessage("Request Completed");
+		Response<User> response = new Response<>(userDaoImpl.findAll(), HttpStatus.OK, "Request Completed");
 		return response;
 	}
 
@@ -100,19 +94,17 @@ public class AdminUserImpl implements AdminUser {
 	 */
 	@Override
 	public Response<Object> viewUser(String id) {
-		Response<Object> response = new Response<>();
-		response.setResults(Arrays.asList(repository.findById(id)));
+		Response<Object> response;
 		String url = apiConfig.getAdminUrl() + "/" + ApiConstants.plugins + "?" + ApiConstants.consumer_id + "=" + id;
-		String requestResponse = null;
+//		String requestResponse = null;
 		try {
-			requestResponse = getRequest(url, null, String.class);
-			response.setResults(Arrays.asList(((JSONObject) JSONValue.parse(requestResponse)).get("data")));
-			response.setHttpStatus(HttpStatus.OK);
-			response.setMessage("Request Completed");
+//			requestResponse = 
+					getRequest(url, null, String.class);
+			response = new Response<>(Arrays.asList(repository.findById(id)), HttpStatus.OK, "Request Completed");
+//			response.setResults(Arrays.asList(((JSONObject) JSONValue.parse(requestResponse)).get("data")));
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			response.setHttpStatus(HttpStatus.BAD_REQUEST);
-			response.setMessage("Unable to process");
+			response = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
 		}
 		return response;
 	}

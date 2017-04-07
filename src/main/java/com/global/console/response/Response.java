@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
  */
 public class Response<T> {
 
-	/** The object. */
+	/** The results. */
 	private List<T> results;
 
 	/** The http status. */
@@ -21,6 +21,36 @@ public class Response<T> {
 
 	/** The message. */
 	private String message;
+
+	/**
+	 * Instantiates a new response.
+	 *
+	 * @param results
+	 *            the results
+	 * @param httpStatus
+	 *            the http status
+	 * @param message
+	 *            the message
+	 */
+	public Response(List<T> results, HttpStatus httpStatus, String message) {
+		this.results = results;
+		this.httpStatus = httpStatus;
+		this.message = message;
+	}
+
+	/**
+	 * Instantiates a new response.
+	 *
+	 * @param httpStatus
+	 *            the http status
+	 * @param message
+	 *            the message
+	 */
+	public Response(HttpStatus httpStatus, String message) {
+		super();
+		this.httpStatus = httpStatus;
+		this.message = message;
+	}
 
 	/**
 	 * Gets the message.
@@ -73,7 +103,7 @@ public class Response<T> {
 	 * Sets the results.
 	 *
 	 * @param results
-	 *            the results to set
+	 *            the new results
 	 */
 	public void setResults(List<T> results) {
 		this.results = results;

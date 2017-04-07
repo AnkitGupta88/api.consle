@@ -38,7 +38,7 @@ public class AdminServiceController {
 	@RequestMapping(value = "/services", method = RequestMethod.GET)
 	public ResponseEntity<Response<Object>> viewServices() {
 		Response<Object> webServices = adminService.viewServices();
-		return new ResponseEntity<Response<Object>>(webServices, webServices.getHttpStatus());
+		return new ResponseEntity<>(webServices, webServices.getHttpStatus());
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class AdminServiceController {
 	@RequestMapping(value = "/services/{serviceName}", method = RequestMethod.GET)
 	public ResponseEntity<Response<Object>> viewService(@PathVariable String serviceName) {
 		Response<Object> webService = adminService.viewService(serviceName);
-		return new ResponseEntity<Response<Object>>(webService, webService.getHttpStatus());
+		return new ResponseEntity<>(webService, webService.getHttpStatus());
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class AdminServiceController {
 	@RequestMapping(value = "/services/{serviceName}/plugins", method = RequestMethod.GET)
 	public ResponseEntity<Response<Object>> viewPlugins(@PathVariable String serviceName) {
 		Response<Object> plugins = adminService.viewPlugins(serviceName);
-		return new ResponseEntity<Response<Object>>(plugins, plugins.getHttpStatus());
+		return new ResponseEntity<>(plugins, plugins.getHttpStatus());
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class AdminServiceController {
 	@RequestMapping(value = "/services/{serviceName}/plugins/delete", method = RequestMethod.DELETE)
 	public ResponseEntity<Response<String>> deletePlugins(@PathVariable String serviceName, @RequestParam String id) {
 		Response<String> plugins = adminService.deletePlugins(serviceName, id);
-		return new ResponseEntity<Response<String>>(plugins, plugins.getHttpStatus());
+		return new ResponseEntity<>(plugins, plugins.getHttpStatus());
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class AdminServiceController {
 	@RequestMapping(value = "/services/{serviceName}/delete", method = RequestMethod.DELETE)
 	public ResponseEntity<Response<String>> deleteService(@PathVariable String serviceName) {
 		Response<String> webServiceName = adminService.deleteService(serviceName);
-		return new ResponseEntity<Response<String>>(webServiceName, webServiceName.getHttpStatus());
+		return new ResponseEntity<>(webServiceName, webServiceName.getHttpStatus());
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class AdminServiceController {
 	public ResponseEntity<Response<String>> registerService(@RequestBody ServiceRegister serviceDetail) {
 
 		Response<String> response = adminService.registerService(serviceDetail);
-		return new ResponseEntity<Response<String>>(response, response.getHttpStatus());
+		return new ResponseEntity<>(response, response.getHttpStatus());
 	}
 
 }

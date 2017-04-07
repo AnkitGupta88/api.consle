@@ -1,10 +1,8 @@
 package com.global.console.service.impl;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
@@ -14,9 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.global.console.configuration.ApiConfiguration;
 import com.global.console.dao.impl.UserDaoImpl;
 import com.global.console.dto.ServiceRegister;
@@ -25,7 +20,6 @@ import com.global.console.service.AdminService;
 import com.global.console.utils.ApiConstants;
 import com.global.console.utils.ServiceUrlBuilderParams;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class AdminServiceImpl.
  */
@@ -49,17 +43,14 @@ public class AdminServiceImpl implements AdminService {
 	public Response<Object> viewServices() {
 		String url = null;
 		String response = null;
-		Response<Object> finalResponse = new Response<>();
+		Response<Object> finalResponse;
 		url = apiConfig.getAdminUrl() + "/apis";
 		try {
 			response = getRequest(url, null, String.class);
-			finalResponse.setResults(Arrays.asList(((JSONObject) JSONValue.parse(response)).get("data")));
-			finalResponse.setMessage("Request Completed");
-			finalResponse.setHttpStatus(HttpStatus.OK);
+			finalResponse = new Response<>(Arrays.asList(((JSONObject) JSONValue.parse(response)).get("data")), HttpStatus.OK, "Request Completed");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			finalResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
-			finalResponse.setMessage("Unable to process");
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
 		}
 		return finalResponse;
 	}
@@ -72,18 +63,15 @@ public class AdminServiceImpl implements AdminService {
 	 */
 	@Override
 	public Response<String> deleteService(String serviceName) {
-		Response<String> finalResponse = new Response<>();
+		Response<String> finalResponse;
 
 		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName;
 		try {
 			deleteRequest(url);
-			finalResponse.setResults(Arrays.asList(serviceName));
-			finalResponse.setMessage("Request Completed");
-			finalResponse.setHttpStatus(HttpStatus.OK);
+			finalResponse = new Response<>(Arrays.asList(serviceName), HttpStatus.OK, "Request Completed");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			finalResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
-			finalResponse.setMessage("Unable to process");
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
 		}
 
 		return finalResponse;
@@ -97,18 +85,15 @@ public class AdminServiceImpl implements AdminService {
 	 */
 	@Override
 	public Response<Object> viewService(String serviceName) {
-		Response<Object> finalResponse = new Response<>();
+		Response<Object> finalResponse;
 		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName;
 		String response = null;
 		try {
 			response = getRequest(url, null, String.class);
-			finalResponse.setResults(Arrays.asList((JSONObject) JSONValue.parse(response)));
-			finalResponse.setMessage("Request Completed");
-			finalResponse.setHttpStatus(HttpStatus.OK);
+			finalResponse = new Response<>(Arrays.asList((JSONObject) JSONValue.parse(response)), HttpStatus.OK, "Request Completed");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			finalResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
-			finalResponse.setMessage("Unable to process");
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
 		}
 		return finalResponse;
 	}
@@ -122,17 +107,14 @@ public class AdminServiceImpl implements AdminService {
 	 */
 	@Override
 	public Response<String> deletePlugins(String serviceName, String id) {
-		Response<String> finalResponse = new Response<>();
+		Response<String> finalResponse;
 		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName + "/plugins/" + id;
 		try {
 			deleteRequest(url);
-			finalResponse.setResults(Arrays.asList(serviceName));
-			finalResponse.setMessage("Request Completed");
-			finalResponse.setHttpStatus(HttpStatus.OK);
+			finalResponse = new Response<>(Arrays.asList(serviceName), HttpStatus.OK, "Request Completed");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			finalResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
-			finalResponse.setMessage("Unable to process");
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
 		}
 		return finalResponse;
 	}
@@ -145,43 +127,17 @@ public class AdminServiceImpl implements AdminService {
 	 */
 	@Override
 	public Response<Object> viewPlugins(String serviceName) {
-		Response<Object> finalResponse = new Response<>();
+		Response<Object> finalResponse;
 		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName + "/plugins";
 		String response = null;
 		try {
 			response = getRequest(url, null, String.class);
-			finalResponse.setResults(Arrays.asList(((JSONObject) JSONValue.parse(response)).get("data")));
-			finalResponse.setMessage("Request Completed");
-			finalResponse.setHttpStatus(HttpStatus.OK);
+			finalResponse = new Response<>(Arrays.asList(((JSONObject) JSONValue.parse(response)).get("data")), HttpStatus.OK, "Request Completed");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			finalResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
-			finalResponse.setMessage("Unable to process");
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
 		}
 		return finalResponse;
-	}
-
-	/**
-	 * Gets the input params class.
-	 *
-	 * @param <T>
-	 *            the generic type
-	 * @param inputParams
-	 *            the input params
-	 * @param t
-	 *            the t
-	 * @return the input params class
-	 * @throws JsonParseException
-	 *             the json parse exception
-	 * @throws JsonMappingException
-	 *             the json mapping exception
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
-	 */
-	private <T> T getInputParamsClass(String inputParams, Class<T> t)
-			throws JsonParseException, JsonMappingException, IOException {
-		ObjectMapper mapper = new ObjectMapper();
-		return mapper.readValue(inputParams, t);
 	}
 
 	/**
@@ -248,14 +204,12 @@ public class AdminServiceImpl implements AdminService {
 	 */
 	@Override
 	public Response<String> registerService(ServiceRegister service) {
-		Response<String> finalResponse = new Response<>();
+		Response<String> finalResponse;
 		try {
 			String url = apiConfig.getAdminUrl() + "/" + ApiConstants.APIS + "/";
 			Map<String, String> serviceParams = ServiceUrlBuilderParams.registerServiceBuilderParams(service);
 			String response = postRequest(url, serviceParams, String.class);
-			finalResponse.setResults(Arrays.asList(response));
-			finalResponse.setMessage("Request Completed");
-			finalResponse.setHttpStatus(HttpStatus.OK);
+			finalResponse = new Response<>(Arrays.asList(response), HttpStatus.OK, "Request Completed");
 
 			serviceParams.clear();
 			serviceParams.put("name", "key-auth");
@@ -276,8 +230,7 @@ public class AdminServiceImpl implements AdminService {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			finalResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
-			finalResponse.setMessage("Unable to process");
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
 		}
 		return finalResponse;
 	}

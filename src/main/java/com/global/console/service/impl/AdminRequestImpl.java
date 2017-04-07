@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.global.console.configuration.ApiConfiguration;
-import com.global.console.dao.impl.UserDaoImpl;
 import com.global.console.model.Plan;
 import com.global.console.model.User;
 import com.global.console.model.WebService;
@@ -48,19 +47,12 @@ public class AdminRequestImpl implements AdminRequest {
 	@Autowired
 	private PlanRepository planRepository;
 	
-	/** The user dao impl. */
-	@Autowired
-	private UserDaoImpl userDaoImpl;
-
 	/* (non-Javadoc)
 	 * @see com.global.console.service.AdminRequest#viewRequests()
 	 */
 	@Override
 	public Response<WebServiceRequests> viewRequests() {
-		Response<WebServiceRequests> response = new Response<>();
-		response.setResults(requestRepository.findAll());
-		response.setHttpStatus(HttpStatus.OK);
-		response.setMessage("Request Completed");
+		Response<WebServiceRequests> response = new Response<>(requestRepository.findAll(), HttpStatus.OK, "Request Completed");
 		return response;
 	}
 
@@ -70,15 +62,13 @@ public class AdminRequestImpl implements AdminRequest {
 	@Override
 	public Response<String> grantService(String requestId) {
 
-			Response<String> response = new Response<>();
+			Response<String> response;
 			UUID id = UUID.fromString(requestId);
 			WebServiceRequests webServiceRequest = requestRepository.findById(id);
 			Plan plan = planRepository.findByPlanId(UUID.fromString(webServiceRequest.getSubscription()));
 			if(plan==null)
 			{
-				response.setResults(Arrays.asList());
-				response.setMessage("No such plan exists");
-				response.setHttpStatus(HttpStatus.BAD_REQUEST);
+				response = new Response<>(HttpStatus.BAD_REQUEST, "No such plan exists");
 			}
 			else
 			{
@@ -113,9 +103,7 @@ public class AdminRequestImpl implements AdminRequest {
 			webServiceList.add(webService);
 			user.setWebServices(webServiceList);
 			repository.save(user);
-			response.setResults(Arrays.asList(id.toString()));
-			response.setHttpStatus(HttpStatus.OK);
-			response.setMessage("Request Completed");
+			response = new Response<>(Arrays.asList(id.toString()), HttpStatus.OK, "Request Completed");
 			}
 			return response;
 	}

@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 	/** The user repository. */
 	@Autowired
 	private RequestsDaoImpl requestsDaoImpl;
-	
+
 	@Autowired
 	private ApiConfiguration apiConfig;
 
@@ -48,10 +48,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Response<String> requestAccess(ServiceRequest serviceRequest) {
 		UUID id = requestsDaoImpl.createServiceRequest(serviceRequest);
-		Response<String> response = new Response<>();
-		response.setResults(Arrays.asList(id.toString()));
-		response.setHttpStatus(HttpStatus.OK);
-		response.setMessage("Request Completed");
+		Response<String> response = new Response<>(Arrays.asList(id.toString()), HttpStatus.OK, "Request Completed");
 		return response;
 	}
 
@@ -62,10 +59,8 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public Response<User> viewAccess(String userId) {
-		Response<User> response = new Response<>();
-		response.setResults(Arrays.asList(userRepository.findById(userId)));
-		response.setHttpStatus(HttpStatus.OK);
-		response.setMessage("Request Completed");
+		Response<User> response = new Response<>(Arrays.asList(userRepository.findById(userId)), HttpStatus.OK,
+				"Request Completed");
 		return response;
 	}
 
@@ -76,20 +71,17 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public Response<Object> viewServices() {
-		Response<Object> finalResponse = new Response<>();
+		Response<Object> finalResponse;
 		String url = null;
 		String response = null;
 		url = apiConfig.getAdminUrl() + "/apis";
 		try {
 			response = getRequest(url, null, String.class);
 			JSONObject json = (JSONObject) JSONValue.parse(response);
-			finalResponse.setResults(Arrays.asList(json.get("data")));
-			finalResponse.setHttpStatus(HttpStatus.OK);
-			finalResponse.setMessage("Request Completed");
+			finalResponse = new Response<>(Arrays.asList(json.get("data")), HttpStatus.OK, "Request Completed");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			finalResponse.setHttpStatus(HttpStatus.BAD_REQUEST);
-			finalResponse.setMessage("Unable to process");
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
 		}
 		return finalResponse;
 	}

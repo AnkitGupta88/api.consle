@@ -36,16 +36,13 @@ public class AdminPlanImpl implements AdminPlan {
 	public Response<Plan> createPlan(PlanDetails planDetails) {
 		UUID planId = UUIDs.timeBased();
 		SubscriptionConfig config = SubscriptionConfig.getConfigType(planDetails.getConfigType());
-		Response<Plan> response = new Response<>();
+		Response<Plan> response;
 		if (config != null) {
 			planDetails.setConfigType(config.getConfigType());
-			response.setResults(Arrays.asList(planDaoImpl.createPlan(planDetails, planId)));
-			response.setHttpStatus(HttpStatus.OK);
-			response.setMessage("Request Completed");
+			response = new Response<>(Arrays.asList(planDaoImpl.createPlan(planDetails, planId)), HttpStatus.OK,
+					"Request Completed");
 		} else {
-			response.setResults(Arrays.asList());
-			response.setMessage("Invalid Config type entered");
-			response.setHttpStatus(HttpStatus.BAD_REQUEST);
+			response = new Response<>(HttpStatus.BAD_REQUEST, "Invalid Config type entered");
 		}
 		return response;
 	}
@@ -57,11 +54,8 @@ public class AdminPlanImpl implements AdminPlan {
 	 */
 	@Override
 	public Response<Plan> viewAllPlans() {
-		Response<Plan> listPlan = new Response<>();
-		listPlan.setResults(planDaoImpl.findAll());
-		listPlan.setHttpStatus(HttpStatus.OK);
-		listPlan.setMessage("Request Completed");
-		return listPlan;
+		Response<Plan> response = new Response<>(planDaoImpl.findAll(), HttpStatus.OK, "Request Completed");
+		return response;
 	}
 
 	/*
@@ -71,10 +65,7 @@ public class AdminPlanImpl implements AdminPlan {
 	 */
 	@Override
 	public Response<Plan> editPlan(String planId, PlanDetails planDetails) {
-		Response<Plan> response = new Response<>();
-		response.setResults(Arrays.asList(planDaoImpl.editPlan(planId, planDetails)));
-		response.setHttpStatus(HttpStatus.OK);
-		response.setMessage("Request Completed");
+		Response<Plan> response = new Response<>(Arrays.asList(planDaoImpl.editPlan(planId, planDetails)), HttpStatus.OK, "Request Completed");
 		return response;
 	}
 
@@ -85,10 +76,7 @@ public class AdminPlanImpl implements AdminPlan {
 	 */
 	@Override
 	public Response<String> deletePlan(String planId) {
-		Response<String> response = new Response<>();
-		response.setResults(Arrays.asList(planDaoImpl.deletePlan(planId).toString()));
-		response.setHttpStatus(HttpStatus.OK);
-		response.setMessage("Request Completed");
+		Response<String> response = new Response<>(Arrays.asList(planDaoImpl.deletePlan(planId).toString()), HttpStatus.OK, "Request Completed");
 		return response;
 	}
 

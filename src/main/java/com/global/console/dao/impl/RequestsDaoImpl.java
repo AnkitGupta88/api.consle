@@ -3,18 +3,18 @@ package com.global.console.dao.impl;
 import java.util.List;
 import java.util.UUID;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.datastax.driver.core.utils.UUIDs;
-import com.global.console.dao.RequestsDao;
+import com.global.console.dao.RequestDao;
 import com.global.console.dto.ServiceRequest;
 import com.global.console.model.WebServiceRequests;
 import com.global.console.repository.RequestRepository;
+import com.global.console.utils.Utils;
 
 @Repository
-public class RequestsDaoImpl implements RequestsDao{
+public class RequestsDaoImpl implements RequestDao{
 
 	/** The user repository. */
 	@Autowired
@@ -27,8 +27,7 @@ public class RequestsDaoImpl implements RequestsDao{
 
 	@Override
 	public UUID createServiceRequest(ServiceRequest request) {
-		ModelMapper modelMapper = new ModelMapper();
-		WebServiceRequests webServiceRequest = modelMapper.map(request, WebServiceRequests.class);
+		WebServiceRequests webServiceRequest = Utils.getObjectMapped(request, WebServiceRequests.class);
 		webServiceRequest.setId(UUIDs.timeBased());
 		webServiceRequest.setStatus("Pending");
 		requestRepository.save(webServiceRequest);

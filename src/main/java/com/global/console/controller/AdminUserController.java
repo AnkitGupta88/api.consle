@@ -39,7 +39,7 @@ public class AdminUserController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public ResponseEntity<Response<String>> addUser(@RequestBody UserDetail user) {
 		Response<String> result = adminService.addUser(user);
-		return new ResponseEntity<Response<String>>(result, result.getHttpStatus());
+		return new ResponseEntity<>(result, result.getHttpStatus());
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class AdminUserController {
 	@RequestMapping(value = "/users", method = RequestMethod.POST)
 	public ResponseEntity<Response<User>> viewAllUsers() {
 		Response<User> users = adminService.viewAllUsers();
-		return new ResponseEntity<Response<User>>(users, users.getHttpStatus());
+		return new ResponseEntity<>(users, users.getHttpStatus());
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class AdminUserController {
 	@RequestMapping(value = "/user/{userId}", method = RequestMethod.POST)
 	public ResponseEntity<Response<Object>> viewUser(@PathVariable String userId) {
 		Response<Object> result = adminService.viewUser(userId);
-		return new ResponseEntity<Response<Object>>(result, result.getHttpStatus());
+		return new ResponseEntity<>(result, result.getHttpStatus());
 	}
 
 }

@@ -11,11 +11,11 @@ public class PropertiesConfiguration {
 
 	/** The kongadmin. */
 	@Value("${spring.data.kong.admin}")
-	private String KONGADMIN;
+	private String kongadmin;
 	
 	/** The konguser. */
 	@Value("${spring.data.kong.user}")
-	private String KONGUSER;
+	private String konguser;
 
 	/**
 	 * Gets the kongadmin.
@@ -23,7 +23,7 @@ public class PropertiesConfiguration {
 	 * @return the kongadmin
 	 */
 	public String getKONGADMIN() {
-		return KONGADMIN;
+		return kongadmin;
 	}
 
 	/**
@@ -32,7 +32,7 @@ public class PropertiesConfiguration {
 	 * @return the konguser
 	 */
 	public String getKONGUSER() {
-		return KONGUSER;
+		return konguser;
 	}
 
 }

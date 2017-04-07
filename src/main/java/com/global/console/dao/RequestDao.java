@@ -13,7 +13,7 @@ import com.global.console.model.WebServiceRequests;
  * @author ankit.gupta4
  *
  */
-public interface RequestsDao {
+public interface RequestDao {
 	
 	public UUID createServiceRequest(ServiceRequest request);
 	
