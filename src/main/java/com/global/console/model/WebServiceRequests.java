@@ -25,15 +25,15 @@ public class WebServiceRequests {
 	private String status;
 
 	/** The subscription. */
-	private String subscription;
+	private String planId;
 
 	/**
 	 * Gets the subscription.
 	 *
 	 * @return the subscription
 	 */
-	public String getSubscription() {
-		return subscription;
+	public String getPlanId() {
+		return planId;
 	}
 
 	/**
@@ -42,8 +42,8 @@ public class WebServiceRequests {
 	 * @param subscription
 	 *            the new subscription
 	 */
-	public void setSubscription(String subscription) {
-		this.subscription = subscription;
+	public void setPlanId(String planId) {
+		this.planId = planId;
 	}
 
 	/**

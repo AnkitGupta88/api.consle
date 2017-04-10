@@ -1,6 +1,8 @@
 package com.global.console.service;
 
 import com.global.console.dto.ServiceRegister;
+import com.global.console.kong.response.ApiPlugin;
+import com.global.console.kong.response.ApiService;
 import com.global.console.response.Response;
 
 /**
@@ -13,7 +15,7 @@ public interface AdminService {
 	 *
 	 * @return the response
 	 */
-	public Response<Object> viewServices();
+	public Response<ApiService> viewServices();
 
 	/**
 	 * Register service.
@@ -22,7 +24,7 @@ public interface AdminService {
 	 *            the service
 	 * @return the response
 	 */
-	public Response<String> registerService(ServiceRegister service);
+	public Response<ApiService> registerService(ServiceRegister service);
 
 	/**
 	 * Delete service.
@@ -40,7 +42,7 @@ public interface AdminService {
 	 *            the service name
 	 * @return the response
 	 */
-	public Response<Object> viewService(String serviceName);
+	public Response<ApiService> viewService(String serviceName);
 
 	/**
 	 * Delete plugins.
@@ -60,5 +62,5 @@ public interface AdminService {
 	 *            the service name
 	 * @return the response
 	 */
-	public Response<Object> viewPlugins(String serviceName);
+	public Response<ApiPlugin> viewPlugins(String serviceName);
 }

@@ -3,10 +3,9 @@
  */
 package com.global.console.dto;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class UserDetail.
- *
- * @author ankit.gupta4
  */
 public class UserDetail {
 
@@ -22,6 +21,28 @@ public class UserDetail {
 	/** The email id. */
 	private String emailId;
 
+	/** The role. */
+	private String role;
+
+	/**
+	 * Gets the role.
+	 *
+	 * @return the role
+	 */
+	public String getRole() {
+		return role;
+	}
+
+	/**
+	 * Sets the role.
+	 *
+	 * @param role
+	 *            the new role
+	 */
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	/**
 	 * Gets the user name.
 	 *
@@ -34,7 +55,8 @@ public class UserDetail {
 	/**
 	 * Sets the user name.
 	 *
-	 * @param userName the new user name
+	 * @param userName
+	 *            the new user name
 	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
@@ -52,7 +74,8 @@ public class UserDetail {
 	/**
 	 * Sets the first name.
 	 *
-	 * @param firstName the new first name
+	 * @param firstName
+	 *            the new first name
 	 */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
@@ -70,7 +93,8 @@ public class UserDetail {
 	/**
 	 * Sets the last name.
 	 *
-	 * @param lastName the new last name
+	 * @param lastName
+	 *            the new last name
 	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
@@ -88,7 +112,8 @@ public class UserDetail {
 	/**
 	 * Sets the email id.
 	 *
-	 * @param emailId the new email id
+	 * @param emailId
+	 *            the new email id
 	 */
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
@@ -106,7 +131,8 @@ public class UserDetail {
 	/**
 	 * Sets the phone no.
 	 *
-	 * @param phoneNo the new phone no
+	 * @param phoneNo
+	 *            the new phone no
 	 */
 	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;

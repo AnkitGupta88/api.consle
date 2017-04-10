@@ -65,7 +65,7 @@ public class AdminRequestImpl implements AdminRequest {
 			Response<String> response;
 			UUID id = UUID.fromString(requestId);
 			WebServiceRequests webServiceRequest = requestRepository.findById(id);
-			Plan plan = planRepository.findByPlanId(UUID.fromString(webServiceRequest.getSubscription()));
+			Plan plan = planRepository.findByPlanId(UUID.fromString(webServiceRequest.getPlanId()));
 			if(plan==null)
 			{
 				response = new Response<>(HttpStatus.BAD_REQUEST, "No such plan exists");

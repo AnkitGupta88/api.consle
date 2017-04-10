@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.global.console.dto.UserDetail;
+import com.global.console.kong.response.ApiUser;
 import com.global.console.model.User;
 import com.global.console.response.Response;
 import com.global.console.service.AdminUser;
@@ -63,8 +64,8 @@ public class AdminUserController {
 	 */
 	@ApiOperation(value = "View Particular User", notes = "View a particular user")
 	@RequestMapping(value = "/user/{userId}", method = RequestMethod.POST)
-	public ResponseEntity<Response<Object>> viewUser(@PathVariable String userId) {
-		Response<Object> result = adminService.viewUser(userId);
+	public ResponseEntity<Response<ApiUser>> viewUser(@PathVariable String userId) {
+		Response<ApiUser> result = adminService.viewUser(userId);
 		return new ResponseEntity<>(result, result.getHttpStatus());
 	}
 

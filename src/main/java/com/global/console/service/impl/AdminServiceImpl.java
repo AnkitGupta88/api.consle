@@ -5,9 +5,9 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Map;
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,6 +15,9 @@ import org.springframework.web.client.RestTemplate;
 import com.global.console.configuration.ApiConfiguration;
 import com.global.console.dao.impl.UserDaoImpl;
 import com.global.console.dto.ServiceRegister;
+import com.global.console.kong.response.ApiPlugin;
+import com.global.console.kong.response.ApiResponse;
+import com.global.console.kong.response.ApiService;
 import com.global.console.response.Response;
 import com.global.console.service.AdminService;
 import com.global.console.utils.ApiConstants;
@@ -40,14 +43,15 @@ public class AdminServiceImpl implements AdminService {
 	 * @see com.global.console.service.AdminService#viewServices()
 	 */
 	@Override
-	public Response<Object> viewServices() {
+	public Response<ApiService> viewServices() {
 		String url = null;
-		String response = null;
-		Response<Object> finalResponse;
+		ApiResponse<ApiService> response = null;
+		Response<ApiService> finalResponse;
 		url = apiConfig.getAdminUrl() + "/apis";
 		try {
-			response = getRequest(url, null, String.class);
-			finalResponse = new Response<>(Arrays.asList(((JSONObject) JSONValue.parse(response)).get("data")), HttpStatus.OK, "Request Completed");
+			response = getRequest(url, null, new ParameterizedTypeReference<ApiResponse<ApiService>>() {
+			});
+			finalResponse = new Response<>(response.getData(), HttpStatus.OK, "Request Completed");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
@@ -84,13 +88,13 @@ public class AdminServiceImpl implements AdminService {
 	 * com.global.console.service.AdminService#viewService(java.lang.String)
 	 */
 	@Override
-	public Response<Object> viewService(String serviceName) {
-		Response<Object> finalResponse;
+	public Response<ApiService> viewService(String serviceName) {
+		Response<ApiService> finalResponse;
 		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName;
-		String response = null;
+		ApiService response = null;
 		try {
-			response = getRequest(url, null, String.class);
-			finalResponse = new Response<>(Arrays.asList((JSONObject) JSONValue.parse(response)), HttpStatus.OK, "Request Completed");
+			response = getRequest(url, null, ApiService.class);
+			finalResponse = new Response<>(Arrays.asList(response), HttpStatus.OK, "Request Completed");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
@@ -126,19 +130,21 @@ public class AdminServiceImpl implements AdminService {
 	 * com.global.console.service.AdminService#viewPlugins(java.lang.String)
 	 */
 	@Override
-	public Response<Object> viewPlugins(String serviceName) {
-		Response<Object> finalResponse;
+	public Response<ApiPlugin> viewPlugins(String serviceName) {
+		Response<ApiPlugin> finalResponse;
 		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName + "/plugins";
-		String response = null;
+		ApiResponse<ApiPlugin> response = null;
 		try {
-			response = getRequest(url, null, String.class);
-			finalResponse = new Response<>(Arrays.asList(((JSONObject) JSONValue.parse(response)).get("data")), HttpStatus.OK, "Request Completed");
+			response = getRequest(url, null, new ParameterizedTypeReference<ApiResponse<ApiPlugin>>() {
+			});
+			finalResponse = new Response<>(response.getData(), HttpStatus.OK, "Request Completed");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
 		}
 		return finalResponse;
 	}
+
 
 	/**
 	 * Gets the request.
@@ -160,6 +166,14 @@ public class AdminServiceImpl implements AdminService {
 		URI uri = new URI(url);
 		return restTemplate.getForObject(uri, t);
 	}
+	
+	private <T> ApiResponse<T> getRequest(String url, Object params,
+			ParameterizedTypeReference<ApiResponse<T>> parameterizedTypeReference) throws URISyntaxException {
+		RestTemplate restTemplate = new RestTemplate();
+		URI uri = new URI(url);
+		return restTemplate.exchange(uri, HttpMethod.GET, null, parameterizedTypeReference).getBody();
+		}
+
 
 	/**
 	 * Post request.
@@ -203,13 +217,14 @@ public class AdminServiceImpl implements AdminService {
 	 * console.dto.ServiceRegister)
 	 */
 	@Override
-	public Response<String> registerService(ServiceRegister service) {
-		Response<String> finalResponse;
+	public Response<ApiService> registerService(ServiceRegister service) {
+		Response<ApiService> finalResponse;
 		try {
 			String url = apiConfig.getAdminUrl() + "/" + ApiConstants.APIS + "/";
 			Map<String, String> serviceParams = ServiceUrlBuilderParams.registerServiceBuilderParams(service);
-			String response = postRequest(url, serviceParams, String.class);
-			finalResponse = new Response<>(Arrays.asList(response), HttpStatus.OK, "Request Completed");
+			@SuppressWarnings("unchecked")
+			ApiResponse<ApiService> response1 = postRequest(url, serviceParams, ApiResponse.class);
+			finalResponse = new Response<>(response1.getData(), HttpStatus.OK, "Request Completed");
 
 			serviceParams.clear();
 			serviceParams.put("name", "key-auth");

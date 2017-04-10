@@ -36,6 +36,9 @@ public class User {
 	/** The key. */
 	private String key;
 
+	/** The role. */
+	private String role;
+
 	/** The web services. */
 	@CassandraType(type = DataType.Name.UDT, userTypeName = "WebService")
 	private List<WebService> webServices;
@@ -71,7 +74,8 @@ public class User {
 	/**
 	 * Sets the user name.
 	 *
-	 * @param userName the new user name
+	 * @param userName
+	 *            the new user name
 	 */
 	public void setUserName(String userName) {
 		this.userName = userName;
@@ -89,7 +93,8 @@ public class User {
 	/**
 	 * Sets the first name.
 	 *
-	 * @param firstName the new first name
+	 * @param firstName
+	 *            the new first name
 	 */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
@@ -107,7 +112,8 @@ public class User {
 	/**
 	 * Sets the last name.
 	 *
-	 * @param lastName the new last name
+	 * @param lastName
+	 *            the new last name
 	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
@@ -125,7 +131,8 @@ public class User {
 	/**
 	 * Sets the email id.
 	 *
-	 * @param emailId the new email id
+	 * @param emailId
+	 *            the new email id
 	 */
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
@@ -143,7 +150,8 @@ public class User {
 	/**
 	 * Sets the phone no.
 	 *
-	 * @param phoneNo the new phone no
+	 * @param phoneNo
+	 *            the new phone no
 	 */
 	public void setPhoneNo(String phoneNo) {
 		this.phoneNo = phoneNo;
@@ -185,6 +193,25 @@ public class User {
 	 */
 	public void setKey(String key) {
 		this.key = key;
+	}
+
+	/**
+	 * Gets the role.
+	 *
+	 * @return the role
+	 */
+	public String getRole() {
+		return role;
+	}
+
+	/**
+	 * Sets the role.
+	 *
+	 * @param role
+	 *            the new role
+	 */
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 }

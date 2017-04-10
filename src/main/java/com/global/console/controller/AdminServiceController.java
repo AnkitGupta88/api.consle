@@ -10,13 +10,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.global.console.dto.ServiceRegister;
+import com.global.console.kong.response.ApiPlugin;
+import com.global.console.kong.response.ApiService;
 import com.global.console.response.Response;
 import com.global.console.service.AdminService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class AdminServiceController.
  */
@@ -36,8 +37,8 @@ public class AdminServiceController {
 	 */
 	@ApiOperation(value = "View Web Services", notes = "View all Web Services")
 	@RequestMapping(value = "/services", method = RequestMethod.GET)
-	public ResponseEntity<Response<Object>> viewServices() {
-		Response<Object> webServices = adminService.viewServices();
+	public ResponseEntity<Response<ApiService>> viewServices() {
+		Response<ApiService> webServices = adminService.viewServices();
 		return new ResponseEntity<>(webServices, webServices.getHttpStatus());
 	}
 
@@ -50,8 +51,8 @@ public class AdminServiceController {
 	 */
 	@ApiOperation(value = "View Web Services", notes = "View a particular Web Service")
 	@RequestMapping(value = "/services/{serviceName}", method = RequestMethod.GET)
-	public ResponseEntity<Response<Object>> viewService(@PathVariable String serviceName) {
-		Response<Object> webService = adminService.viewService(serviceName);
+	public ResponseEntity<Response<ApiService>> viewService(@PathVariable String serviceName) {
+		Response<ApiService> webService = adminService.viewService(serviceName);
 		return new ResponseEntity<>(webService, webService.getHttpStatus());
 	}
 
@@ -64,8 +65,8 @@ public class AdminServiceController {
 	 */
 	@ApiOperation(value = "View Web Service Plugins", notes = "View Web Service plugins")
 	@RequestMapping(value = "/services/{serviceName}/plugins", method = RequestMethod.GET)
-	public ResponseEntity<Response<Object>> viewPlugins(@PathVariable String serviceName) {
-		Response<Object> plugins = adminService.viewPlugins(serviceName);
+	public ResponseEntity<Response<ApiPlugin>> viewPlugins(@PathVariable String serviceName) {
+		Response<ApiPlugin> plugins = adminService.viewPlugins(serviceName);
 		return new ResponseEntity<>(plugins, plugins.getHttpStatus());
 	}
 
@@ -108,9 +109,8 @@ public class AdminServiceController {
 	 */
 	@ApiOperation(value = "Register API", notes = "Register new API")
 	@RequestMapping(value = "/services/register", method = RequestMethod.POST)
-	public ResponseEntity<Response<String>> registerService(@RequestBody ServiceRegister serviceDetail) {
-
-		Response<String> response = adminService.registerService(serviceDetail);
+	public ResponseEntity<Response<ApiService>> registerService(@RequestBody ServiceRegister serviceDetail) {
+		Response<ApiService> response = adminService.registerService(serviceDetail);
 		return new ResponseEntity<>(response, response.getHttpStatus());
 	}
 

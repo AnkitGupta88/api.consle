@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,6 +14,9 @@ import org.springframework.web.client.RestTemplate;
 import com.global.console.configuration.ApiConfiguration;
 import com.global.console.dao.impl.UserDaoImpl;
 import com.global.console.dto.UserDetail;
+import com.global.console.kong.response.ApiPlugin;
+import com.global.console.kong.response.ApiResponse;
+import com.global.console.kong.response.ApiUser;
 import com.global.console.model.User;
 import com.global.console.repository.UserRepository;
 import com.global.console.response.Response;
@@ -92,16 +94,18 @@ public class AdminUserImpl implements AdminUser {
 	 * 
 	 * @see com.global.console.service.AdminUser#viewUser(java.lang.String)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Response<Object> viewUser(String id) {
-		Response<Object> response;
+	public Response<ApiUser> viewUser(String id) {
+		Response<ApiUser> response;
+		ApiUser user = new ApiUser();
 		String url = apiConfig.getAdminUrl() + "/" + ApiConstants.plugins + "?" + ApiConstants.consumer_id + "=" + id;
-//		String requestResponse = null;
+		ApiResponse<ApiPlugin> requestResponse = null;
 		try {
-//			requestResponse = 
-					getRequest(url, null, String.class);
-			response = new Response<>(Arrays.asList(repository.findById(id)), HttpStatus.OK, "Request Completed");
-//			response.setResults(Arrays.asList(((JSONObject) JSONValue.parse(requestResponse)).get("data")));
+			requestResponse = getRequest(url, null, ApiResponse.class);
+			user.setUser(repository.findById(id));
+			user.setPlugins(requestResponse.getData());
+			response = new Response<>(Arrays.asList(user), HttpStatus.OK, "Request Completed");
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 			response = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");

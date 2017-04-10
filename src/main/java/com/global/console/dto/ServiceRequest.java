@@ -17,7 +17,7 @@ public class ServiceRequest {
 	private String userId;
 	
 	/** The subscription. */
-	private String subscription;
+	private String planId;
 
 	/**
 	 * Gets the service name.
@@ -60,8 +60,8 @@ public class ServiceRequest {
 	 *
 	 * @return the subscription
 	 */
-	public String getSubscription() {
-		return subscription;
+	public String getPlanId() {
+		return planId;
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class ServiceRequest {
 	 *
 	 * @param subscription the new subscription
 	 */
-	public void setSubscription(String subscription) {
-		this.subscription = subscription;
+	public void setPlanId(String planId) {
+		this.planId = planId;
 	}
 }
