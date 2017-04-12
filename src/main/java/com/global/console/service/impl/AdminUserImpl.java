@@ -22,6 +22,7 @@ import com.global.console.repository.UserRepository;
 import com.global.console.response.Response;
 import com.global.console.service.AdminUser;
 import com.global.console.utils.ApiConstants;
+import com.global.console.utils.MailConfig;
 import com.global.console.utils.ServiceUrlBuilderParams;
 
 /**
@@ -68,11 +69,16 @@ public class AdminUserImpl implements AdminUser {
 
 			userDaoImpl.addUser(user, id, key);
 
-			finalResponse = new Response<>(Arrays.asList(id), HttpStatus.OK, "Request Completed");
+			finalResponse = new Response<>(Arrays.asList(id), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);
+		}
+		
+		if(finalResponse.getResults()!=null)
+		{
+			MailConfig.send(user.getEmailId(), "Welcome to API CONSOLE", "Thankyou for registering");
 		}
 
 		return finalResponse;
@@ -85,7 +91,7 @@ public class AdminUserImpl implements AdminUser {
 	 */
 	@Override
 	public Response<User> viewAllUsers() {
-		Response<User> response = new Response<>(userDaoImpl.findAll(), HttpStatus.OK, "Request Completed");
+		Response<User> response = new Response<>(userDaoImpl.findAll(), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 		return response;
 	}
 
@@ -105,10 +111,10 @@ public class AdminUserImpl implements AdminUser {
 			requestResponse = getRequest(url, null, ApiResponse.class);
 			user.setUser(repository.findById(id));
 			user.setPlugins(requestResponse.getData());
-			response = new Response<>(Arrays.asList(user), HttpStatus.OK, "Request Completed");
+			response = new Response<>(Arrays.asList(user), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			response = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
+			response = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);
 		}
 		return response;
 	}

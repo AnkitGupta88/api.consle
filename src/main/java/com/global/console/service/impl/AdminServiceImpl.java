@@ -51,10 +51,10 @@ public class AdminServiceImpl implements AdminService {
 		try {
 			response = getRequest(url, null, new ParameterizedTypeReference<ApiResponse<ApiService>>() {
 			});
-			finalResponse = new Response<>(response.getData(), HttpStatus.OK, "Request Completed");
+			finalResponse = new Response<>(response.getData(), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);
 		}
 		return finalResponse;
 	}
@@ -72,10 +72,10 @@ public class AdminServiceImpl implements AdminService {
 		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName;
 		try {
 			deleteRequest(url);
-			finalResponse = new Response<>(Arrays.asList(serviceName), HttpStatus.OK, "Request Completed");
+			finalResponse = new Response<>(Arrays.asList(serviceName), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);
 		}
 
 		return finalResponse;
@@ -94,10 +94,10 @@ public class AdminServiceImpl implements AdminService {
 		ApiService response = null;
 		try {
 			response = getRequest(url, null, ApiService.class);
-			finalResponse = new Response<>(Arrays.asList(response), HttpStatus.OK, "Request Completed");
+			finalResponse = new Response<>(Arrays.asList(response), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);
 		}
 		return finalResponse;
 	}
@@ -115,10 +115,10 @@ public class AdminServiceImpl implements AdminService {
 		String url = apiConfig.getAdminUrl() + "/apis/" + serviceName + "/plugins/" + id;
 		try {
 			deleteRequest(url);
-			finalResponse = new Response<>(Arrays.asList(serviceName), HttpStatus.OK, "Request Completed");
+			finalResponse = new Response<>(Arrays.asList(serviceName), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);
 		}
 		return finalResponse;
 	}
@@ -137,10 +137,10 @@ public class AdminServiceImpl implements AdminService {
 		try {
 			response = getRequest(url, null, new ParameterizedTypeReference<ApiResponse<ApiPlugin>>() {
 			});
-			finalResponse = new Response<>(response.getData(), HttpStatus.OK, "Request Completed");
+			finalResponse = new Response<>(response.getData(), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);
 		}
 		return finalResponse;
 	}
@@ -224,7 +224,7 @@ public class AdminServiceImpl implements AdminService {
 			Map<String, String> serviceParams = ServiceUrlBuilderParams.registerServiceBuilderParams(service);
 			@SuppressWarnings("unchecked")
 			ApiResponse<ApiService> response1 = postRequest(url, serviceParams, ApiResponse.class);
-			finalResponse = new Response<>(response1.getData(), HttpStatus.OK, "Request Completed");
+			finalResponse = new Response<>(response1.getData(), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 
 			serviceParams.clear();
 			serviceParams.put("name", "key-auth");
@@ -245,7 +245,7 @@ public class AdminServiceImpl implements AdminService {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);
 		}
 		return finalResponse;
 	}

@@ -33,6 +33,10 @@ public class ApiConstants {
 	
 	/** The Constant consumer_id. */
 	public static final String consumer_id = "consumer_id";
+	
+	public static final String REQUEST_COMPLETED = "Request Completed";
+	
+	public static final String REQUEST_ERROR = "Unable to process";
 
 	/**
 	 * Instantiates a new api constants.

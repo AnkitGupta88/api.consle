@@ -20,6 +20,7 @@ import com.global.console.model.User;
 import com.global.console.repository.UserRepository;
 import com.global.console.response.Response;
 import com.global.console.service.UserService;
+import com.global.console.utils.ApiConstants;
 
 /**
  * The Class UserServiceImpl.
@@ -48,7 +49,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Response<String> requestAccess(ServiceRequest serviceRequest) {
 		UUID id = requestsDaoImpl.createServiceRequest(serviceRequest);
-		Response<String> response = new Response<>(Arrays.asList(id.toString()), HttpStatus.OK, "Request Completed");
+		Response<String> response = new Response<>(Arrays.asList(id.toString()), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 		return response;
 	}
 
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Response<User> viewAccess(String userId) {
 		Response<User> response = new Response<>(Arrays.asList(userRepository.findById(userId)), HttpStatus.OK,
-				"Request Completed");
+				ApiConstants.REQUEST_COMPLETED);
 		return response;
 	}
 
@@ -78,10 +79,10 @@ public class UserServiceImpl implements UserService {
 		try {
 			response = getRequest(url, null, String.class);
 			JSONObject json = (JSONObject) JSONValue.parse(response);
-			finalResponse = new Response<>(Arrays.asList(json.get("data")), HttpStatus.OK, "Request Completed");
+			finalResponse = new Response<>(Arrays.asList(json.get("data")), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
-			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, "Unable to process");
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);
 		}
 		return finalResponse;
 	}

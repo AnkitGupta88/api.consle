@@ -24,6 +24,7 @@ import com.global.console.repository.RequestRepository;
 import com.global.console.repository.UserRepository;
 import com.global.console.response.Response;
 import com.global.console.service.AdminRequest;
+import com.global.console.utils.ApiConstants;
 
 /**
  * The Class AdminServiceImpl.
@@ -52,7 +53,7 @@ public class AdminRequestImpl implements AdminRequest {
 	 */
 	@Override
 	public Response<WebServiceRequests> viewRequests() {
-		Response<WebServiceRequests> response = new Response<>(requestRepository.findAll(), HttpStatus.OK, "Request Completed");
+		Response<WebServiceRequests> response = new Response<>(requestRepository.findAll(), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 		return response;
 	}
 
@@ -68,7 +69,7 @@ public class AdminRequestImpl implements AdminRequest {
 			Plan plan = planRepository.findByPlanId(UUID.fromString(webServiceRequest.getPlanId()));
 			if(plan==null)
 			{
-				response = new Response<>(HttpStatus.BAD_REQUEST, "No such plan exists");
+				response = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);
 			}
 			else
 			{
@@ -89,6 +90,7 @@ public class AdminRequestImpl implements AdminRequest {
 				postRequest(url, params, String.class);
 
 			} catch (URISyntaxException e) {
+				response = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);
 				e.printStackTrace();
 			}
 
@@ -103,7 +105,7 @@ public class AdminRequestImpl implements AdminRequest {
 			webServiceList.add(webService);
 			user.setWebServices(webServiceList);
 			repository.save(user);
-			response = new Response<>(Arrays.asList(id.toString()), HttpStatus.OK, "Request Completed");
+			response = new Response<>(Arrays.asList(id.toString()), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 			}
 			return response;
 	}
