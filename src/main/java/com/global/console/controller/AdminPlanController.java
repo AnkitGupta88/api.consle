@@ -48,7 +48,7 @@ public class AdminPlanController {
 	 * @return the response entity
 	 */
 	@ApiOperation(value = "View Plans", notes = "View all the plans")
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ResponseEntity<Response<Plan>> viewPlans() {
 		Response<Plan> plans = adminPlanImpl.viewAllPlans();
 		return new ResponseEntity<>(plans, plans.getHttpStatus());

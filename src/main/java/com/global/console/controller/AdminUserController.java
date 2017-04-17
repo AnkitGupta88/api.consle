@@ -49,7 +49,7 @@ public class AdminUserController {
 	 * @return the response entity
 	 */
 	@ApiOperation(value = "View Users", notes = "View All Users")
-	@RequestMapping(value = "/users", method = RequestMethod.POST)
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ResponseEntity<Response<User>> viewAllUsers() {
 		Response<User> users = adminService.viewAllUsers();
 		return new ResponseEntity<>(users, users.getHttpStatus());
@@ -63,9 +63,23 @@ public class AdminUserController {
 	 * @return the response entity
 	 */
 	@ApiOperation(value = "View Particular User", notes = "View a particular user")
-	@RequestMapping(value = "/user/{userId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
 	public ResponseEntity<Response<ApiUser>> viewUser(@PathVariable String userId) {
 		Response<ApiUser> result = adminService.viewUser(userId);
+		return new ResponseEntity<>(result, result.getHttpStatus());
+	}
+
+	/**
+	 * User key.
+	 *
+	 * @param userId
+	 *            the user id
+	 * @return the response entity
+	 */
+	@ApiOperation(value = "Regenerate Key", notes = "Regenerate Key for a User")
+	@RequestMapping(value = "/{userId}/key", method = RequestMethod.POST)
+	public ResponseEntity<Response<String>> userKey(@PathVariable String userId) {
+		Response<String> result = adminService.userKey(userId);
 		return new ResponseEntity<>(result, result.getHttpStatus());
 	}
 

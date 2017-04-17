@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @Api("Admin Controller")
-@RequestMapping("/api/admin")
+@RequestMapping("/api/admin/services")
 public class AdminServiceController {
 
 	/** The admin service. */
@@ -36,7 +36,7 @@ public class AdminServiceController {
 	 * @return the response entity
 	 */
 	@ApiOperation(value = "View Web Services", notes = "View all Web Services")
-	@RequestMapping(value = "/services", method = RequestMethod.GET)
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ResponseEntity<Response<ApiService>> viewServices() {
 		Response<ApiService> webServices = adminService.viewServices();
 		return new ResponseEntity<>(webServices, webServices.getHttpStatus());
@@ -50,7 +50,7 @@ public class AdminServiceController {
 	 * @return the response entity
 	 */
 	@ApiOperation(value = "View Web Services", notes = "View a particular Web Service")
-	@RequestMapping(value = "/services/{serviceName}", method = RequestMethod.GET)
+	@RequestMapping(value = "/{serviceName}", method = RequestMethod.GET)
 	public ResponseEntity<Response<ApiService>> viewService(@PathVariable String serviceName) {
 		Response<ApiService> webService = adminService.viewService(serviceName);
 		return new ResponseEntity<>(webService, webService.getHttpStatus());
@@ -64,7 +64,7 @@ public class AdminServiceController {
 	 * @return the response entity
 	 */
 	@ApiOperation(value = "View Web Service Plugins", notes = "View Web Service plugins")
-	@RequestMapping(value = "/services/{serviceName}/plugins", method = RequestMethod.GET)
+	@RequestMapping(value = "/{serviceName}/plugins", method = RequestMethod.GET)
 	public ResponseEntity<Response<ApiPlugin>> viewPlugins(@PathVariable String serviceName) {
 		Response<ApiPlugin> plugins = adminService.viewPlugins(serviceName);
 		return new ResponseEntity<>(plugins, plugins.getHttpStatus());
@@ -80,7 +80,7 @@ public class AdminServiceController {
 	 * @return the response entity
 	 */
 	@ApiOperation(value = "Delete Web Service Plugin", notes = "Delet Web Service plugin")
-	@RequestMapping(value = "/services/{serviceName}/plugins/delete", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/{serviceName}/plugins/delete", method = RequestMethod.DELETE)
 	public ResponseEntity<Response<String>> deletePlugins(@PathVariable String serviceName, @RequestParam String id) {
 		Response<String> plugins = adminService.deletePlugins(serviceName, id);
 		return new ResponseEntity<>(plugins, plugins.getHttpStatus());
@@ -94,7 +94,7 @@ public class AdminServiceController {
 	 * @return the response entity
 	 */
 	@ApiOperation(value = "Delete Web Services", notes = "Delete a Web Services")
-	@RequestMapping(value = "/services/{serviceName}/delete", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/{serviceName}/delete", method = RequestMethod.DELETE)
 	public ResponseEntity<Response<String>> deleteService(@PathVariable String serviceName) {
 		Response<String> webServiceName = adminService.deleteService(serviceName);
 		return new ResponseEntity<>(webServiceName, webServiceName.getHttpStatus());
@@ -108,7 +108,7 @@ public class AdminServiceController {
 	 * @return the response entity
 	 */
 	@ApiOperation(value = "Register API", notes = "Register new API")
-	@RequestMapping(value = "/services/register", method = RequestMethod.POST)
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<Response<ApiService>> registerService(@RequestBody ServiceRegister serviceDetail) {
 		Response<ApiService> response = adminService.registerService(serviceDetail);
 		return new ResponseEntity<>(response, response.getHttpStatus());

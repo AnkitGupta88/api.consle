@@ -23,6 +23,7 @@ import com.global.console.service.AdminService;
 import com.global.console.utils.ApiConstants;
 import com.global.console.utils.ServiceUrlBuilderParams;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class AdminServiceImpl.
  */
@@ -145,7 +146,6 @@ public class AdminServiceImpl implements AdminService {
 		return finalResponse;
 	}
 
-
 	/**
 	 * Gets the request.
 	 *
@@ -166,14 +166,28 @@ public class AdminServiceImpl implements AdminService {
 		URI uri = new URI(url);
 		return restTemplate.getForObject(uri, t);
 	}
-	
+
+	/**
+	 * Gets the request.
+	 *
+	 * @param <T>
+	 *            the generic type
+	 * @param url
+	 *            the url
+	 * @param params
+	 *            the params
+	 * @param parameterizedTypeReference
+	 *            the parameterized type reference
+	 * @return the request
+	 * @throws URISyntaxException
+	 *             the URI syntax exception
+	 */
 	private <T> ApiResponse<T> getRequest(String url, Object params,
 			ParameterizedTypeReference<ApiResponse<T>> parameterizedTypeReference) throws URISyntaxException {
 		RestTemplate restTemplate = new RestTemplate();
 		URI uri = new URI(url);
 		return restTemplate.exchange(uri, HttpMethod.GET, null, parameterizedTypeReference).getBody();
-		}
-
+	}
 
 	/**
 	 * Post request.

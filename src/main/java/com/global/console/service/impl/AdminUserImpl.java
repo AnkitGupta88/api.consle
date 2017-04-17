@@ -7,6 +7,8 @@ import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,6 +19,7 @@ import com.global.console.dto.UserDetail;
 import com.global.console.kong.response.ApiPlugin;
 import com.global.console.kong.response.ApiResponse;
 import com.global.console.kong.response.ApiUser;
+import com.global.console.kong.response.UserKeyAuth;
 import com.global.console.model.User;
 import com.global.console.repository.UserRepository;
 import com.global.console.response.Response;
@@ -75,9 +78,8 @@ public class AdminUserImpl implements AdminUser {
 			e.printStackTrace();
 			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);
 		}
-		
-		if(finalResponse.getResults()!=null)
-		{
+
+		if (finalResponse.getResults() != null) {
 			MailConfig.send(user.getEmailId(), "Welcome to API CONSOLE", "Thankyou for registering");
 		}
 
@@ -117,6 +119,41 @@ public class AdminUserImpl implements AdminUser {
 			response = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);
 		}
 		return response;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.global.console.service.AdminUser#userKey(java.lang.String)
+	 */
+	@Override
+	public Response<String> userKey(String userId) {
+		Response<String> finalResponse;
+		String url = null;
+		JSONObject response = null;
+		ApiResponse<UserKeyAuth> keyResponse = null;
+		try {
+			url = apiConfig.getAdminUrl() + "/" + ApiConstants.CONSUMERS + "/" + userId + "/" + ApiConstants.KEY_AUTH;
+			keyResponse = getRequest(url, null, new ParameterizedTypeReference<ApiResponse<UserKeyAuth>>() {
+			});
+
+			for (UserKeyAuth key : keyResponse.getData()) {
+				String id = key.getId();
+				url = apiConfig.getAdminUrl() + "/" + ApiConstants.CONSUMERS + "/" + userId + "/"
+						+ ApiConstants.KEY_AUTH + "/" + id;
+				deleteRequest(url);
+			}
+
+			url = apiConfig.getAdminUrl() + "/" + ApiConstants.CONSUMERS + "/" + userId + "/" + ApiConstants.KEY_AUTH;
+			response = postRequest(url, null, JSONObject.class);
+			String key = response.get(ApiConstants.KEY).toString();
+			userDaoImpl.updateUserKey(userId, key);
+			finalResponse = new Response<>(Arrays.asList(key), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);
+		}
+		return finalResponse;
 	}
 
 	/**
@@ -159,6 +196,19 @@ public class AdminUserImpl implements AdminUser {
 		URI uri = new URI(url);
 		RestTemplate restTemplate = new RestTemplate();
 		return restTemplate.postForObject(uri, params, t);
+	}
+
+	private void deleteRequest(String url) throws URISyntaxException {
+		URI uri = new URI(url);
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.delete(uri);
+	}
+
+	private <T> ApiResponse<T> getRequest(String url, Object params,
+			ParameterizedTypeReference<ApiResponse<T>> parameterizedTypeReference) throws URISyntaxException {
+		RestTemplate restTemplate = new RestTemplate();
+		URI uri = new URI(url);
+		return restTemplate.exchange(uri, HttpMethod.GET, null, parameterizedTypeReference).getBody();
 	}
 
 }

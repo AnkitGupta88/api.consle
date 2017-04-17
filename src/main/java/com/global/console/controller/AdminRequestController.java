@@ -19,7 +19,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @Api("Admin Controller")
-@RequestMapping("/api/admin")
+@RequestMapping("/api/admin/request")
 public class AdminRequestController {
 
 	/** The admin service. */
@@ -34,7 +34,7 @@ public class AdminRequestController {
 	 * @return the response entity
 	 */
 	@ApiOperation(value = "Grant Access", notes = "Grant access to a Web Services")
-	@RequestMapping(value = "/request/grant", method = RequestMethod.POST)
+	@RequestMapping(value = "/grant", method = RequestMethod.POST)
 	public ResponseEntity<Response<String>> grantAccess(@RequestParam String requestId) {
 		Response<String> response = adminService.grantService(requestId);
 		return new ResponseEntity<>(response, response.getHttpStatus());
@@ -46,7 +46,7 @@ public class AdminRequestController {
 	 * @return the response entity
 	 */
 	@ApiOperation(value = "View Requests", notes = "View All Requests")
-	@RequestMapping(value = "/request", method = RequestMethod.GET)
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ResponseEntity<Response<WebServiceRequests>> viewRequests() {
 		Response<WebServiceRequests> response = adminService.viewRequests();
 		return new ResponseEntity<>(response, response.getHttpStatus());

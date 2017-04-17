@@ -14,7 +14,8 @@ public class ServiceUrlBuilderParams {
 	/**
 	 * Register service builder params.
 	 *
-	 * @param service the service
+	 * @param service
+	 *            the service
 	 * @return the map
 	 */
 	public static Map<String, String> registerServiceBuilderParams(ServiceRegister service) {
@@ -30,7 +31,8 @@ public class ServiceUrlBuilderParams {
 	/**
 	 * Adds the user service builder params.
 	 *
-	 * @param user the user
+	 * @param user
+	 *            the user
 	 * @return the map
 	 */
 	public static Map<String, String> addUserServiceBuilderParams(UserDetail user) {
@@ -42,7 +44,8 @@ public class ServiceUrlBuilderParams {
 	/**
 	 * Adds the user key service builder params.
 	 *
-	 * @param user the user
+	 * @param user
+	 *            the user
 	 * @return the map
 	 */
 	public static Map<String, String> addUserKeyServiceBuilderParams(UserDetail user) {

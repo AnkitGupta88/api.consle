@@ -36,4 +36,11 @@ public class UserDaoImpl implements UserDao{
 		return userRepository.findAll();
 	}
 
+	@Override
+	public void updateUserKey(String userId, String key) {
+		User user = userRepository.findById(userId);
+		user.setKey(key);
+		userRepository.save(user);
+	}
+
 }

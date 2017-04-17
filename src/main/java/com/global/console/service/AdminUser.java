@@ -5,32 +5,44 @@ import com.global.console.kong.response.ApiUser;
 import com.global.console.model.User;
 import com.global.console.response.Response;
 
+// TODO: Auto-generated Javadoc
 /**
- * The Interface AdminService.
+ * The Interface AdminUser.
  */
 public interface AdminUser {
 
 	/**
 	 * Adds the user.
 	 *
-	 * @param userParams the user params
-	 * @return the string
+	 * @param user
+	 *            the user
+	 * @return the response
 	 */
 	public Response<String> addUser(UserDetail user);
-	
+
 	/**
 	 * View all users.
 	 *
-	 * @return the list
+	 * @return the response
 	 */
 	public Response<User> viewAllUsers();
-	
+
 	/**
 	 * View user.
 	 *
-	 * @param id the id
-	 * @return the user
+	 * @param id
+	 *            the id
+	 * @return the response
 	 */
 	public Response<ApiUser> viewUser(String id);
-	
+
+	/**
+	 * User key.
+	 *
+	 * @param userId
+	 *            the user id
+	 * @return the response
+	 */
+	public Response<String> userKey(String userId);
+
 }

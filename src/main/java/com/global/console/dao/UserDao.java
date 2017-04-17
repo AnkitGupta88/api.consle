@@ -15,6 +15,8 @@ import com.global.console.model.User;
 public interface UserDao {
 	
 	public void addUser(UserDetail userDetail, String id, String key);
+	
+	public void updateUserKey(String userId, String key);
 
 	public List<User> findAll();
 }
