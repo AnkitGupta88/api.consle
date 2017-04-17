@@ -2,11 +2,8 @@ package com.global.console.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
-
-import com.datastax.driver.core.utils.UUIDs;
 
 // TODO: Auto-generated Javadoc
 /**

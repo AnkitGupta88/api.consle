@@ -1,6 +1,7 @@
 package com.global.console.configuration;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -13,6 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @EnableSwagger2
 @org.springframework.context.annotation.Configuration
+@ComponentScan
 public class SwaggerConfiguration {
 
 	/**
