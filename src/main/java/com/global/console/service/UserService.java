@@ -34,4 +34,6 @@ public interface UserService {
 	 */
 	public Response<Object> viewServices();
 
+	public Response<String> getToken(String userId);
+
 }

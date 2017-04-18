@@ -3,10 +3,11 @@
  */
 package com.global.console.dto;
 
+import java.util.List;
+
+// TODO: Auto-generated Javadoc
 /**
  * The Class ServiceRegister.
- *
- * @author ankit.gupta4
  */
 public class ServiceRegister {
 
@@ -21,6 +22,28 @@ public class ServiceRegister {
 
 	/** The created by. */
 	private String createdBy;
+
+	/** The security. */
+	private List<String> securityPlugins;
+
+	/**
+	 * Gets the securityPlugins.
+	 *
+	 * @return the securityPlugins
+	 */
+	public List<String> getSecurityPlugins() {
+		return securityPlugins;
+	}
+
+	/**
+	 * Sets the securityPlugins.
+	 *
+	 * @param securityPlugins
+	 *            the new securityPlugins
+	 */
+	public void setSecurityPlugins(List<String> securityPlugins) {
+		this.securityPlugins = securityPlugins;
+	}
 
 	/**
 	 * Gets the service name.

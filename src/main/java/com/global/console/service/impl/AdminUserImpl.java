@@ -27,7 +27,9 @@ import com.global.console.service.AdminUser;
 import com.global.console.utils.ApiConstants;
 import com.global.console.utils.MailConfig;
 import com.global.console.utils.ServiceUrlBuilderParams;
+import com.google.gson.JsonObject;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class AdminUserImpl.
  */
@@ -69,6 +71,10 @@ public class AdminUserImpl implements AdminUser {
 			params = ServiceUrlBuilderParams.addUserKeyServiceBuilderParams(user);
 			response = postRequest(url, null, JSONObject.class);
 			String key = response.get(ApiConstants.KEY).toString();
+
+			url = apiConfig.getAdminUrl() + "/" + ApiConstants.CONSUMERS + "/" + user.getUserName() + "/"
+					+ ApiConstants.JWT;
+			response = postRequest(url, null, JSONObject.class);
 
 			userDaoImpl.addUser(user, id, key);
 
@@ -198,12 +204,35 @@ public class AdminUserImpl implements AdminUser {
 		return restTemplate.postForObject(uri, params, t);
 	}
 
+	/**
+	 * Delete request.
+	 *
+	 * @param url
+	 *            the url
+	 * @throws URISyntaxException
+	 *             the URI syntax exception
+	 */
 	private void deleteRequest(String url) throws URISyntaxException {
 		URI uri = new URI(url);
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.delete(uri);
 	}
 
+	/**
+	 * Gets the request.
+	 *
+	 * @param <T>
+	 *            the generic type
+	 * @param url
+	 *            the url
+	 * @param params
+	 *            the params
+	 * @param parameterizedTypeReference
+	 *            the parameterized type reference
+	 * @return the request
+	 * @throws URISyntaxException
+	 *             the URI syntax exception
+	 */
 	private <T> ApiResponse<T> getRequest(String url, Object params,
 			ParameterizedTypeReference<ApiResponse<T>> parameterizedTypeReference) throws URISyntaxException {
 		RestTemplate restTemplate = new RestTemplate();

@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.global.console.dto.ServiceRequest;
@@ -52,6 +53,13 @@ public class UserController {
 	public ResponseEntity<Response<Object>> viewServices() {
 		Response<Object> webServices = userService.viewServices();
 		return new ResponseEntity<>(webServices, HttpStatus.OK);
+	}
+	
+	@ApiOperation(value = "Get Token", notes = "Get JWT Token")
+	@RequestMapping(value = "/token", method = RequestMethod.GET)
+	public ResponseEntity<Response<String>> getToken(@RequestParam String userId) {
+		Response<String> token = userService.getToken(userId);
+		return new ResponseEntity<>(token, HttpStatus.OK);
 	}
 
 }

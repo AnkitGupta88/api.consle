@@ -240,11 +240,20 @@ public class AdminServiceImpl implements AdminService {
 			ApiResponse<ApiService> response1 = postRequest(url, serviceParams, ApiResponse.class);
 			finalResponse = new Response<>(response1.getData(), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 
+
 			serviceParams.clear();
 			serviceParams.put("name", "key-auth");
 			url = apiConfig.getAdminUrl() + "/apis/" + service.getServiceName() + "/plugins/";
 			postRequest(url, serviceParams, String.class);
-
+			
+			if(service.getSecurityPlugins().contains("jwt"))
+			{
+				serviceParams.clear();
+				serviceParams.put("name", "jwt");
+				url = apiConfig.getAdminUrl() + "/apis/" + service.getServiceName() + "/plugins/";
+				postRequest(url, serviceParams, String.class);
+			}
+			
 			serviceParams.clear();
 			serviceParams.put("name", "rate-limiting");
 			serviceParams.put("config.second", "10");

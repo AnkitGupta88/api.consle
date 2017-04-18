@@ -1,9 +1,13 @@
 package com.global.console.utils;
 
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.modelmapper.ModelMapper;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -49,5 +53,14 @@ public class Utils {
 	public static String getDateFromTimestamp(String timestamp) {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		return sdf.format(new Date((long)Long.parseLong(timestamp)*1000));
+	}
+	
+	public static String getToken(String secret, String key) throws IllegalArgumentException, UnsupportedEncodingException
+	{
+		Algorithm algorithm = Algorithm.HMAC256(secret);
+	    String token = JWT.create()
+	        .withIssuer(key)
+	        .sign(algorithm);
+	    return token;
 	}
 }
