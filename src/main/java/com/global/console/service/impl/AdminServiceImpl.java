@@ -209,7 +209,7 @@ public class AdminServiceImpl implements AdminService {
 		RestTemplate restTemplate = new RestTemplate();
 		return restTemplate.postForObject(uri, params, t);
 	}
-
+	
 	/**
 	 * Delete request.
 	 *
@@ -236,9 +236,8 @@ public class AdminServiceImpl implements AdminService {
 		try {
 			String url = apiConfig.getAdminUrl() + "/" + ApiConstants.APIS + "/";
 			Map<String, String> serviceParams = ServiceUrlBuilderParams.registerServiceBuilderParams(service);
-			@SuppressWarnings("unchecked")
-			ApiResponse<ApiService> response1 = postRequest(url, serviceParams, ApiResponse.class);
-			finalResponse = new Response<>(response1.getData(), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
+			ApiService response1 = postRequest(url, serviceParams, ApiService.class);
+			finalResponse = new Response<>(Arrays.asList(response1), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 
 
 			serviceParams.clear();

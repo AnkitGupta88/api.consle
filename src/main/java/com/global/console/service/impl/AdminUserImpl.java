@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.global.console.configuration.ApiConfiguration;
+import com.global.console.configuration.MailConfiguration;
 import com.global.console.dao.impl.UserDaoImpl;
 import com.global.console.dto.UserDetail;
 import com.global.console.kong.response.ApiPlugin;
@@ -27,7 +28,6 @@ import com.global.console.service.AdminUser;
 import com.global.console.utils.ApiConstants;
 import com.global.console.utils.MailConfig;
 import com.global.console.utils.ServiceUrlBuilderParams;
-import com.google.gson.JsonObject;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -47,6 +47,10 @@ public class AdminUserImpl implements AdminUser {
 	/** The user dao impl. */
 	@Autowired
 	UserDaoImpl userDaoImpl;
+
+	/** The mail configuration. */
+	@Autowired
+	private MailConfiguration mailConfiguration;
 
 	/*
 	 * (non-Javadoc)
@@ -86,7 +90,8 @@ public class AdminUserImpl implements AdminUser {
 		}
 
 		if (finalResponse.getResults() != null) {
-			MailConfig.send(user.getEmailId(), "Welcome to API CONSOLE", "Thankyou for registering");
+			MailConfig.getInstance(mailConfiguration).send(user.getEmailId(), "Welcome to API CONSOLE",
+					"Thankyou for registering");
 		}
 
 		return finalResponse;

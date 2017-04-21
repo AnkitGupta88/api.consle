@@ -26,9 +26,8 @@ import com.global.console.repository.UserRepository;
 import com.global.console.response.Response;
 import com.global.console.service.UserService;
 import com.global.console.utils.ApiConstants;
-import com.global.console.utils.Utils;
+import com.global.console.utils.JwtTokenGenerator;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class UserServiceImpl.
  */
@@ -117,7 +116,7 @@ public class UserServiceImpl implements UserService {
 			String key = response.getData().get(0).getKey();
 			
 			if(key!=null&&secret!=null)
-				token = Utils.getToken(secret, key);
+				token = JwtTokenGenerator.getToken(secret, key);
 			
 			finalResponse = new Response<>(Arrays.asList(token), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 			

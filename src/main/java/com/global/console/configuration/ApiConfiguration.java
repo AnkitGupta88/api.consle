@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Configuration;
 // TODO: Auto-generated Javadoc
 /**
  * The Class ApiConfiguration.
- *
- * @author ankit.gupta4
  */
 @Configuration
 public class ApiConfiguration {
@@ -22,18 +20,19 @@ public class ApiConfiguration {
 	/** The admin port. */
 	@Value("${kong.admin.port}")
 	private String adminPort;
-	
+
+	/** The user host. */
 	@Value("${kong.user.host}")
 	private String userHost;
 
-	/** The admin port. */
+	/** The user port. */
 	@Value("${kong.user.port}")
 	private String userPort;
 
 	/**
-	 * Gets the adminhost.
+	 * Gets the admin host.
 	 *
-	 * @return the adminhost
+	 * @return the admin host
 	 */
 	public String getAdminHost() {
 		return adminHost;
@@ -57,17 +56,31 @@ public class ApiConfiguration {
 		return "http://" + adminHost + ":" + adminPort;
 	}
 
+	/**
+	 * Gets the user host.
+	 *
+	 * @return the user host
+	 */
 	public String getUserHost() {
 		return userHost;
 	}
 
+	/**
+	 * Gets the user port.
+	 *
+	 * @return the user port
+	 */
 	public String getUserPort() {
 		return userPort;
 	}
 
+	/**
+	 * Gets the user url.
+	 *
+	 * @return the user url
+	 */
 	public String getUserUrl() {
 		return "http://" + userHost + ":" + userPort;
 	}
 
-	
 }

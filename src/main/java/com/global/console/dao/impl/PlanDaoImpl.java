@@ -10,7 +10,8 @@ import com.global.console.dao.PlanDao;
 import com.global.console.dto.PlanDetails;
 import com.global.console.model.Plan;
 import com.global.console.repository.PlanRepository;
-import com.global.console.utils.Utils;
+import com.global.console.utils.ObjectDeserializer;
+import com.global.console.utils.DateConverter;
 
 /**
  * The Class PlanDaoImpl.
@@ -30,9 +31,9 @@ public class PlanDaoImpl implements PlanDao {
 	 */
 	@Override
 	public Plan createPlan(PlanDetails planDetails, UUID id) {
-		Plan plan = Utils.getObjectMapped(planDetails, Plan.class);
+		Plan plan = ObjectDeserializer.getObjectMapped(planDetails, Plan.class);
 		plan.setPlanId(id);
-		String createdOn = Utils.getCurrentDate();
+		String createdOn = DateConverter.getCurrentDate();
 		plan.setCreatedOn(createdOn);
 		planRepository.save(plan);
 		return plan;
@@ -63,7 +64,7 @@ public class PlanDaoImpl implements PlanDao {
 		plan.setCreatedBy(planDetails.getCreatedBy()==null?plan.getCreatedBy():planDetails.getCreatedBy());
 		plan.setConfigType(planDetails.getConfigType()==null?plan.getConfigType():planDetails.getConfigType());
 		plan.setConfigQuantity(planDetails.getConfigQuantity()==0?plan.getConfigQuantity():planDetails.getConfigQuantity());
-		String createdOn = Utils.getCurrentDate();
+		String createdOn = DateConverter.getCurrentDate();
 		plan.setCreatedOn(createdOn);
 		planRepository.save(plan);
 		return plan;

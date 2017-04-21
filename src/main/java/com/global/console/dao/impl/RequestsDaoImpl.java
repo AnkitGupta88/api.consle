@@ -11,7 +11,7 @@ import com.global.console.dao.RequestDao;
 import com.global.console.dto.ServiceRequest;
 import com.global.console.model.WebServiceRequests;
 import com.global.console.repository.RequestRepository;
-import com.global.console.utils.Utils;
+import com.global.console.utils.ObjectDeserializer;
 
 @Repository
 public class RequestsDaoImpl implements RequestDao{
@@ -27,7 +27,7 @@ public class RequestsDaoImpl implements RequestDao{
 
 	@Override
 	public UUID createServiceRequest(ServiceRequest request) {
-		WebServiceRequests webServiceRequest = Utils.getObjectMapped(request, WebServiceRequests.class);
+		WebServiceRequests webServiceRequest = ObjectDeserializer.getObjectMapped(request, WebServiceRequests.class);
 		webServiceRequest.setId(UUIDs.timeBased());
 		webServiceRequest.setStatus("Pending");
 		requestRepository.save(webServiceRequest);

@@ -3,39 +3,56 @@ package com.global.console.utils;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.mail.internet.MimeMessage.RecipientType;
+
+import com.global.console.configuration.MailConfiguration;
+
 import java.util.*;
 
 /**
- * The Class GmailConfig.
+ * The Class MailConfig.
  */
 public class MailConfig {
 
-	/** The host. */
-	private static String HOST = "smtp.gmail.com";
+	/** The mail config. */
+	private static MailConfig mailConfig;
 
-	/** The user. */
-	private static String USER = "lakshayswanigl@gmail.com";
+	private MailConfiguration mailConfiguration;
 
-	/** The password. */
-	private static String PASSWORD = "yamahar15";
+	/** The props. */
+	private Properties props;
 
-	/** The port. */
-	private static String PORT = "465";
+	/**
+	 * Instantiates a new mail config.
+	 */
+	public MailConfig(MailConfiguration mailConfiguration) {
+		this.mailConfiguration = mailConfiguration;
+		props = new Properties();
+		props.put(ApiConstants.MAIL_HOST, mailConfiguration.getHOST());
+		props.put(ApiConstants.MAIL_PORT, mailConfiguration.getPORT());
+		props.put(ApiConstants.MAIL_USER, mailConfiguration.getUSER());
+		props.put(ApiConstants.MAIL_AUTH, mailConfiguration.getAUTH());
+		props.put(ApiConstants.MAIL_STARTTLS, mailConfiguration.getSTARTTLS());
+		props.put(ApiConstants.MAIL_DEBUG, mailConfiguration.getDEBUG());
+		props.put(ApiConstants.MAIL_SOCKETFACTORY_PORT, mailConfiguration.getPORT());
+		props.put(ApiConstants.MAIL_SOCKETFACTORY_CLASS, mailConfiguration.getSOCKET_FACTORY());
+		props.put(ApiConstants.MAIL_SOCKETFACTORY_FALLBACK, mailConfiguration.getFALLBACK());
+	}
 
-	/** The from. */
-	private static String FROM = "GL";
-
-	/** The starttls. */
-	private static String STARTTLS = "true";
-
-	/** The auth. */
-	private static String AUTH = "true";
-
-	/** The debug. */
-	private static String DEBUG = "true";
-
-	/** The socket factory. */
-	private static String SOCKET_FACTORY = "javax.net.ssl.SSLSocketFactory";
+	/**
+	 * Gets the single instance of MailConfig.
+	 *
+	 * @return single instance of MailConfig
+	 */
+	public static MailConfig getInstance(MailConfiguration mailConfiguration) {
+		if (mailConfig == null) {
+			synchronized (MailConfig.class) {
+				if (mailConfig == null) {
+					mailConfig = new MailConfig(mailConfiguration);
+				}
+			}
+		}
+		return mailConfig;
+	}
 
 	/**
 	 * Send.
@@ -47,38 +64,21 @@ public class MailConfig {
 	 * @param text
 	 *            the text
 	 */
-	public static synchronized void send(String to, String subject, String text) {
-		Properties props = new Properties();
-
-		props.put("mail.smtp.host", HOST);
-		props.put("mail.smtp.port", PORT);
-		props.put("mail.smtp.user", USER);
-
-		props.put("mail.smtp.auth", AUTH);
-		props.put("mail.smtp.starttls.enable", STARTTLS);
-		props.put("mail.smtp.debug", DEBUG);
-
-		props.put("mail.smtp.socketFactory.port", PORT);
-		props.put("mail.smtp.socketFactory.class", SOCKET_FACTORY);
-		props.put("mail.smtp.socketFactory.fallback", "false");
-
+	public synchronized void send(String to, String subject, String text) {
 		try {
-
 			Session session = Session.getDefaultInstance(props, null);
 			session.setDebug(true);
-
 			MimeMessage message = new MimeMessage(session);
 			message.setText(text, "UTF-8", "html");
 			message.setSubject(subject);
-			message.setFrom(new InternetAddress(FROM));
+			message.setFrom(new InternetAddress(mailConfiguration.getFROM()));
 			message.addRecipient(RecipientType.TO, new InternetAddress(to));
 			message.saveChanges();
-
 			Transport transport = session.getTransport("smtp");
-			transport.connect(HOST, USER, PASSWORD);
+			transport.connect(mailConfiguration.getHOST(), mailConfiguration.getUSER(),
+					mailConfiguration.getPASSWORD());
 			transport.sendMessage(message, message.getAllRecipients());
 			transport.close();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

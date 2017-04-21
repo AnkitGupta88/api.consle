@@ -1,6 +1,6 @@
 package com.global.console.kong.response;
 
-import com.global.console.utils.Utils;
+import com.global.console.utils.DateConverter;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -121,7 +121,7 @@ public class ApiService {
 	 *            the new created at
 	 */
 	public void setCreated_at(String created_at) {
-		this.created_at = Utils.getDateFromTimestamp(created_at);
+		this.created_at = DateConverter.getDateFromTimestamp(created_at);
 	}
 
 	/**
