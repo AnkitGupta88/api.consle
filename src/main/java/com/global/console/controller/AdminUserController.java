@@ -17,8 +17,9 @@ import com.global.console.service.AdminUser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+// TODO: Auto-generated Javadoc
 /**
- * The Class AdminController.
+ * The Class AdminUserController.
  */
 @RestController
 @Api("Admin Controller")
@@ -32,8 +33,8 @@ public class AdminUserController {
 	/**
 	 * Adds the user.
 	 *
-	 * @param userParams
-	 *            the user params
+	 * @param user
+	 *            the user
 	 * @return the response entity
 	 */
 	@ApiOperation(value = "Add User", notes = "Add a new user")
@@ -83,4 +84,33 @@ public class AdminUserController {
 		return new ResponseEntity<>(result, result.getHttpStatus());
 	}
 
+	/**
+	 * Edits the user.
+	 *
+	 * @param userId
+	 *            the user id
+	 * @param user
+	 *            the user
+	 * @return the response entity
+	 */
+	@ApiOperation(value = "Edit Particular User", notes = "Edit a particular user")
+	@RequestMapping(value = "/{userId}/edit", method = RequestMethod.POST)
+	public ResponseEntity<Response<User>> editUser(@PathVariable String userId, @RequestBody UserDetail user) {
+		Response<User> result = adminService.editUser(userId, user);
+		return new ResponseEntity<>(result, result.getHttpStatus());
+	}
+
+	/**
+	 * Delete user.
+	 *
+	 * @param userId
+	 *            the user id
+	 * @return the response entity
+	 */
+	@ApiOperation(value = "Delete Particular User", notes = "Delete a particular user")
+	@RequestMapping(value = "/{userId}/delete", method = RequestMethod.DELETE)
+	public ResponseEntity<Response<String>> deleteUser(@PathVariable String userId) {
+		Response<String> result = adminService.deleteUser(userId);
+		return new ResponseEntity<>(result, result.getHttpStatus());
+	}
 }

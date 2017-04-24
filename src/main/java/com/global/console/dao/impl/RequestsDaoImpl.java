@@ -13,18 +13,30 @@ import com.global.console.model.WebServiceRequests;
 import com.global.console.repository.RequestRepository;
 import com.global.console.utils.ObjectDeserializer;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class RequestsDaoImpl.
+ */
 @Repository
-public class RequestsDaoImpl implements RequestDao{
+public class RequestsDaoImpl implements RequestDao {
 
-	/** The user repository. */
+	/** The request repository. */
 	@Autowired
 	private RequestRepository requestRepository;
 
-	
+	/**
+	 * Instantiates a new requests dao impl.
+	 */
 	public RequestsDaoImpl() {
 	}
 
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.global.console.dao.RequestDao#createServiceRequest(com.global.console
+	 * .dto.ServiceRequest)
+	 */
 	@Override
 	public UUID createServiceRequest(ServiceRequest request) {
 		WebServiceRequests webServiceRequest = ObjectDeserializer.getObjectMapped(request, WebServiceRequests.class);
@@ -34,17 +46,25 @@ public class RequestsDaoImpl implements RequestDao{
 		return webServiceRequest.getId();
 	}
 
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.global.console.dao.RequestDao#viewServiceRequests()
+	 */
 	@Override
 	public List<WebServiceRequests> viewServiceRequests() {
 		return null;
 	}
 
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.global.console.dao.RequestDao#grantServiceRequest(java.lang.String)
+	 */
 	@Override
 	public void grantServiceRequest(String id) {
-		
-	}
 
+	}
 
 }

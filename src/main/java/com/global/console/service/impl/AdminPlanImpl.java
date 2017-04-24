@@ -16,6 +16,7 @@ import com.global.console.response.Response;
 import com.global.console.service.AdminPlan;
 import com.global.console.utils.ApiConstants;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class AdminPlanImpl.
  */
@@ -66,7 +67,8 @@ public class AdminPlanImpl implements AdminPlan {
 	 */
 	@Override
 	public Response<Plan> editPlan(String planId, PlanDetails planDetails) {
-		Response<Plan> response = new Response<>(Arrays.asList(planDaoImpl.editPlan(planId, planDetails)), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
+		Response<Plan> response = new Response<>(Arrays.asList(planDaoImpl.editPlan(planId, planDetails)),
+				HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 		return response;
 	}
 
@@ -77,7 +79,8 @@ public class AdminPlanImpl implements AdminPlan {
 	 */
 	@Override
 	public Response<String> deletePlan(String planId) {
-		Response<String> response = new Response<>(Arrays.asList(planDaoImpl.deletePlan(planId).toString()), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
+		Response<String> response = new Response<>(Arrays.asList(planDaoImpl.deletePlan(planId).toString()),
+				HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 		return response;
 	}
 

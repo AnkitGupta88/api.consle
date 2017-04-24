@@ -36,8 +36,8 @@ public interface PlanDao {
 	/**
 	 * Edits the plan.
 	 *
-	 * @param planName
-	 *            the plan name
+	 * @param planId
+	 *            the plan id
 	 * @param planDetails
 	 *            the plan details
 	 * @return the plan
@@ -47,8 +47,8 @@ public interface PlanDao {
 	/**
 	 * Delete plan.
 	 *
-	 * @param planName
-	 *            the plan name
+	 * @param planId
+	 *            the plan id
 	 * @return the uuid
 	 */
 	public UUID deletePlan(String planId);

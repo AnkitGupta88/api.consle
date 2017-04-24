@@ -45,4 +45,24 @@ public interface AdminUser {
 	 */
 	public Response<String> userKey(String userId);
 
+	/**
+	 * Edits the user.
+	 *
+	 * @param userId
+	 *            the user id
+	 * @param user
+	 *            the user
+	 * @return the response
+	 */
+	public Response<User> editUser(String userId, UserDetail user);
+
+	/**
+	 * Delete user.
+	 *
+	 * @param userId
+	 *            the user id
+	 * @return the response
+	 */
+	public Response<String> deleteUser(String userId);
+
 }

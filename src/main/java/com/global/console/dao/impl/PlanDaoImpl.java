@@ -13,6 +13,7 @@ import com.global.console.repository.PlanRepository;
 import com.global.console.utils.ObjectDeserializer;
 import com.global.console.utils.DateConverter;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class PlanDaoImpl.
  */
@@ -60,10 +61,11 @@ public class PlanDaoImpl implements PlanDao {
 
 		UUID id = UUID.fromString(planId);
 		Plan plan = planRepository.findByPlanId(id);
-		plan.setPlanName((planDetails.getPlanName()==null?plan.getPlanName():planDetails.getPlanName()));
-		plan.setCreatedBy(planDetails.getCreatedBy()==null?plan.getCreatedBy():planDetails.getCreatedBy());
-		plan.setConfigType(planDetails.getConfigType()==null?plan.getConfigType():planDetails.getConfigType());
-		plan.setConfigQuantity(planDetails.getConfigQuantity()==0?plan.getConfigQuantity():planDetails.getConfigQuantity());
+		plan.setPlanName((planDetails.getPlanName() == null ? plan.getPlanName() : planDetails.getPlanName()));
+		plan.setCreatedBy(planDetails.getCreatedBy() == null ? plan.getCreatedBy() : planDetails.getCreatedBy());
+		plan.setConfigType(planDetails.getConfigType() == null ? plan.getConfigType() : planDetails.getConfigType());
+		plan.setConfigQuantity(
+				planDetails.getConfigQuantity() == 0 ? plan.getConfigQuantity() : planDetails.getConfigQuantity());
 		String createdOn = DateConverter.getCurrentDate();
 		plan.setCreatedOn(createdOn);
 		planRepository.save(plan);

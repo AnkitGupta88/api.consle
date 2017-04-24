@@ -245,4 +245,47 @@ public class AdminUserImpl implements AdminUser {
 		return restTemplate.exchange(uri, HttpMethod.GET, null, parameterizedTypeReference).getBody();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.global.console.service.AdminUser#editUser(java.lang.String,
+	 * com.global.console.dto.UserDetail)
+	 */
+	@Override
+	public Response<User> editUser(String userId, UserDetail user) {
+		Response<User> response;
+
+		try {
+			response = new Response<>(Arrays.asList(userDaoImpl.editUser(user, userId)), HttpStatus.OK,
+					ApiConstants.REQUEST_COMPLETED);
+		} catch (Exception e) {
+			e.printStackTrace();
+			response = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);
+		}
+		return response;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.global.console.service.AdminUser#deleteUser(java.lang.String)
+	 */
+	@Override
+	public Response<String> deleteUser(String userId) {
+		Response<String> response;
+
+		try {
+			String url = apiConfig.getAdminUrl() + "/consumers/" + userId;
+			deleteRequest(url);
+			userDaoImpl.deleteUser(userId);
+
+			response = new Response<>(Arrays.asList(userId), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			response = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);
+		}
+		return response;
+	}
+
 }

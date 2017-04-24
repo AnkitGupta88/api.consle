@@ -209,7 +209,7 @@ public class AdminServiceImpl implements AdminService {
 		RestTemplate restTemplate = new RestTemplate();
 		return restTemplate.postForObject(uri, params, t);
 	}
-	
+
 	/**
 	 * Delete request.
 	 *
@@ -239,20 +239,18 @@ public class AdminServiceImpl implements AdminService {
 			ApiService response1 = postRequest(url, serviceParams, ApiService.class);
 			finalResponse = new Response<>(Arrays.asList(response1), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 
-
 			serviceParams.clear();
 			serviceParams.put("name", "key-auth");
 			url = apiConfig.getAdminUrl() + "/apis/" + service.getServiceName() + "/plugins/";
 			postRequest(url, serviceParams, String.class);
-			
-			if(service.getSecurityPlugins().contains("jwt"))
-			{
+
+			if (service.getSecurityPlugins().contains("jwt")) {
 				serviceParams.clear();
 				serviceParams.put("name", "jwt");
 				url = apiConfig.getAdminUrl() + "/apis/" + service.getServiceName() + "/plugins/";
 				postRequest(url, serviceParams, String.class);
 			}
-			
+
 			serviceParams.clear();
 			serviceParams.put("name", "rate-limiting");
 			serviceParams.put("config.second", "10");
