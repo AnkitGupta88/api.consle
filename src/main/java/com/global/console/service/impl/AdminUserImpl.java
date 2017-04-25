@@ -2,7 +2,10 @@ package com.global.console.service.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
@@ -20,13 +23,16 @@ import com.global.console.dto.UserDetail;
 import com.global.console.kong.response.ApiPlugin;
 import com.global.console.kong.response.ApiResponse;
 import com.global.console.kong.response.ApiUser;
+import com.global.console.kong.response.Consumer;
 import com.global.console.kong.response.UserKeyAuth;
 import com.global.console.model.User;
+import com.global.console.model.WebService;
 import com.global.console.repository.UserRepository;
 import com.global.console.response.Response;
 import com.global.console.service.AdminUser;
 import com.global.console.utils.ApiConstants;
 import com.global.console.utils.MailConfig;
+import com.global.console.utils.ObjectDeserializer;
 import com.global.console.utils.ServiceUrlBuilderParams;
 
 // TODO: Auto-generated Javadoc
@@ -70,13 +76,13 @@ public class AdminUserImpl implements AdminUser {
 			response = postRequest(url, params, JSONObject.class);
 			String id = response.get(ApiConstants.ID).toString();
 
-			url = apiConfig.getAdminUrl() + "/" + ApiConstants.CONSUMERS + "/" + user.getUserName() + "/"
+			url = apiConfig.getAdminUrl() + "/" + ApiConstants.CONSUMERS + "/" + user.getLoginId() + "/"
 					+ ApiConstants.KEY_AUTH;
 			params = ServiceUrlBuilderParams.addUserKeyServiceBuilderParams(user);
 			response = postRequest(url, null, JSONObject.class);
 			String key = response.get(ApiConstants.KEY).toString();
 
-			url = apiConfig.getAdminUrl() + "/" + ApiConstants.CONSUMERS + "/" + user.getUserName() + "/"
+			url = apiConfig.getAdminUrl() + "/" + ApiConstants.CONSUMERS + "/" + user.getLoginId() + "/"
 					+ ApiConstants.JWT;
 			response = postRequest(url, null, JSONObject.class);
 
@@ -103,8 +109,35 @@ public class AdminUserImpl implements AdminUser {
 	 * @see com.global.console.service.AdminUser#viewAllUsers()
 	 */
 	@Override
-	public Response<User> viewAllUsers() {
-		Response<User> response = new Response<>(userDaoImpl.findAll(), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
+	public Response<Consumer> viewAllUsers() {
+
+		List<User> users = userDaoImpl.findAll();
+		List<Consumer> consumers = new ArrayList<>();
+		for (User user : users) {
+			Consumer consumer = ObjectDeserializer.getObjectMapped(user, Consumer.class);
+			Map<String, List<ApiPlugin>> webServicePlugin = new HashMap<>();
+			Map<String, String> webUrl = new HashMap<>();
+			if (user.getWebServices() != null) {
+				for (WebService webService : user.getWebServices()) {
+					String url = apiConfig.getAdminUrl() + "/apis/" + webService.getName() + "/plugins?consumer_id="
+							+ user.getId();
+					ApiResponse<ApiPlugin> response = null;
+					try {
+						response = getRequest(url, null, new ParameterizedTypeReference<ApiResponse<ApiPlugin>>() {
+						});
+						webServicePlugin.put(webService.getName(), response.getData());
+						webUrl.put(webService.getName(), webService.getUrl());
+					} catch (URISyntaxException e) {
+						e.printStackTrace();
+					}
+				}
+				consumer.setWebUrl(webUrl);
+				consumer.setWebService(webServicePlugin);
+			}
+			consumers.add(consumer);
+		}
+
+		Response<Consumer> response = new Response<>(consumers, HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 		return response;
 	}
 

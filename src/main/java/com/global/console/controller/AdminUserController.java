@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.global.console.dto.UserDetail;
 import com.global.console.kong.response.ApiUser;
+import com.global.console.kong.response.Consumer;
 import com.global.console.model.User;
 import com.global.console.response.Response;
 import com.global.console.service.AdminUser;
@@ -51,8 +52,8 @@ public class AdminUserController {
 	 */
 	@ApiOperation(value = "View Users", notes = "View All Users")
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ResponseEntity<Response<User>> viewAllUsers() {
-		Response<User> users = adminService.viewAllUsers();
+	public ResponseEntity<Response<Consumer>> viewAllUsers() {
+		Response<Consumer> users = adminService.viewAllUsers();
 		return new ResponseEntity<>(users, users.getHttpStatus());
 	}
 
@@ -113,4 +114,5 @@ public class AdminUserController {
 		Response<String> result = adminService.deleteUser(userId);
 		return new ResponseEntity<>(result, result.getHttpStatus());
 	}
+	
 }

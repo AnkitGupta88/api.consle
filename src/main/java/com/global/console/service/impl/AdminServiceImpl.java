@@ -2,7 +2,9 @@ package com.global.console.service.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +54,18 @@ public class AdminServiceImpl implements AdminService {
 		try {
 			response = getRequest(url, null, new ParameterizedTypeReference<ApiResponse<ApiService>>() {
 			});
-			finalResponse = new Response<>(response.getData(), HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
+
+			List<ApiService> services = new ArrayList<>();
+			for (ApiService service : response.getData()) {
+				String url1 = apiConfig.getAdminUrl() + "/apis/" + service.getName() + "/plugins";
+				ApiResponse<ApiPlugin> response1 = null;
+				response1 = getRequest(url1, null, new ParameterizedTypeReference<ApiResponse<ApiPlugin>>() {
+				});
+				service.setApiPlugins(response1.getData());
+				services.add(service);
+
+			}
+			finalResponse = new Response<>(services, HttpStatus.OK, ApiConstants.REQUEST_COMPLETED);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 			finalResponse = new Response<>(HttpStatus.BAD_REQUEST, ApiConstants.REQUEST_ERROR);

@@ -1,8 +1,10 @@
 package com.global.console.kong.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.global.console.dto.PluginConfig;
 import com.global.console.utils.DateConverter;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class ApiPlugin.
  */
@@ -23,8 +25,11 @@ public class ApiPlugin {
 	/** The name. */
 	private String name;
 
+	/** The consumer id. */
+	private String consumer_id;
+
 	/** The config. */
-	@JsonIgnoreProperties(ignoreUnknown=true)
+	@JsonIgnoreProperties(ignoreUnknown = true)
 	private ApiConfig config;
 
 	/**
@@ -138,7 +143,26 @@ public class ApiPlugin {
 	 *            the new name
 	 */
 	public void setName(String name) {
-		this.name = name;
+		this.name = PluginConfig.getConfigType(name).toString();
+	}
+
+	/**
+	 * Gets the consumer id.
+	 *
+	 * @return the consumer id
+	 */
+	public String getConsumer_id() {
+		return consumer_id;
+	}
+
+	/**
+	 * Sets the consumer id.
+	 *
+	 * @param consumer_id
+	 *            the new consumer id
+	 */
+	public void setConsumer_id(String consumer_id) {
+		this.consumer_id = consumer_id;
 	}
 
 }

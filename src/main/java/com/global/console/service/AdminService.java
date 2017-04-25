@@ -5,6 +5,7 @@ import com.global.console.kong.response.ApiPlugin;
 import com.global.console.kong.response.ApiService;
 import com.global.console.response.Response;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Interface AdminService.
  */

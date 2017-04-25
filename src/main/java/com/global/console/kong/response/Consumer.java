@@ -1,21 +1,15 @@
-package com.global.console.model;
+package com.global.console.kong.response;
 
 import java.util.List;
-
-import org.springframework.data.cassandra.mapping.CassandraType;
-import org.springframework.data.cassandra.mapping.PrimaryKey;
-import org.springframework.data.cassandra.mapping.Table;
-import com.datastax.driver.core.DataType;
+import java.util.Map;
 
 // TODO: Auto-generated Javadoc
 /**
  * The Class User.
  */
-@Table
-public class User {
+public class Consumer {
 
 	/** The id. */
-	@PrimaryKey
 	private String id;
 
 	/** The user name. */
@@ -39,9 +33,11 @@ public class User {
 	/** The role. */
 	private String role;
 
-	/** The web services. */
-	@CassandraType(type = DataType.Name.UDT, userTypeName = "WebService")
-	private List<WebService> webServices;
+	/** The web service. */
+	private Map<String, List<ApiPlugin>> webService;
+
+	/** The web url. */
+	private Map<String, String> webUrl;
 
 	/**
 	 * Gets the id.
@@ -158,25 +154,6 @@ public class User {
 	}
 
 	/**
-	 * Gets the web services.
-	 *
-	 * @return the web services
-	 */
-	public List<WebService> getWebServices() {
-		return webServices;
-	}
-
-	/**
-	 * Sets the web services.
-	 *
-	 * @param webServices
-	 *            the new web services
-	 */
-	public void setWebServices(List<WebService> webServices) {
-		this.webServices = webServices;
-	}
-
-	/**
 	 * Gets the key.
 	 *
 	 * @return the key
@@ -212,6 +189,44 @@ public class User {
 	 */
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	/**
+	 * Gets the web service.
+	 *
+	 * @return the web service
+	 */
+	public Map<String, List<ApiPlugin>> getWebService() {
+		return webService;
+	}
+
+	/**
+	 * Sets the web service.
+	 *
+	 * @param webService
+	 *            the web service
+	 */
+	public void setWebService(Map<String, List<ApiPlugin>> webService) {
+		this.webService = webService;
+	}
+
+	/**
+	 * Gets the web url.
+	 *
+	 * @return the web url
+	 */
+	public Map<String, String> getWebUrl() {
+		return webUrl;
+	}
+
+	/**
+	 * Sets the web url.
+	 *
+	 * @param webUrl
+	 *            the web url
+	 */
+	public void setWebUrl(Map<String, String> webUrl) {
+		this.webUrl = webUrl;
 	}
 
 }

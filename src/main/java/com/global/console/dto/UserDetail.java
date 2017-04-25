@@ -10,7 +10,7 @@ package com.global.console.dto;
 public class UserDetail {
 
 	/** The user name. */
-	private String userName;
+	private String loginId;
 
 	/** The first name. */
 	private String firstName;
@@ -43,23 +43,13 @@ public class UserDetail {
 		this.role = role;
 	}
 
-	/**
-	 * Gets the user name.
-	 *
-	 * @return the user name
-	 */
-	public String getUserName() {
-		return userName;
+	
+	public String getLoginId() {
+		return loginId;
 	}
 
-	/**
-	 * Sets the user name.
-	 *
-	 * @param userName
-	 *            the new user name
-	 */
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
 	}
 
 	/**

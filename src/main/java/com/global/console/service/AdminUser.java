@@ -2,6 +2,7 @@ package com.global.console.service;
 
 import com.global.console.dto.UserDetail;
 import com.global.console.kong.response.ApiUser;
+import com.global.console.kong.response.Consumer;
 import com.global.console.model.User;
 import com.global.console.response.Response;
 
@@ -25,7 +26,7 @@ public interface AdminUser {
 	 *
 	 * @return the response
 	 */
-	public Response<User> viewAllUsers();
+	public Response<Consumer> viewAllUsers();
 
 	/**
 	 * View user.

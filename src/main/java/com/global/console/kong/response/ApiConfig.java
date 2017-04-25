@@ -44,6 +44,36 @@ public class ApiConfig {
 	/** The whitelist. */
 	private List<String> whitelist;
 
+	private List<String> uri_param_names;
+	
+	private String secret_is_base64;
+	
+	private String key_claim_name;
+	
+	public List<String> getUri_param_names() {
+		return uri_param_names;
+	}
+
+	public void setUri_param_names(List<String> uri_param_names) {
+		this.uri_param_names = uri_param_names;
+	}
+
+	public String getSecret_is_base64() {
+		return secret_is_base64;
+	}
+
+	public void setSecret_is_base64(String secret_is_base64) {
+		this.secret_is_base64 = secret_is_base64;
+	}
+
+	public String getKey_claim_name() {
+		return key_claim_name;
+	}
+
+	public void setKey_claim_name(String key_claim_name) {
+		this.key_claim_name = key_claim_name;
+	}
+
 	/**
 	 * Gets the limit by.
 	 *

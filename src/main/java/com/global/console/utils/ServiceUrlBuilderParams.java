@@ -38,7 +38,7 @@ public class ServiceUrlBuilderParams {
 	 */
 	public static Map<String, String> addUserServiceBuilderParams(UserDetail user) {
 		Map<String, String> params = new HashMap<>();
-		params.put("username", user.getUserName());
+		params.put("username", user.getLoginId());
 		return params;
 	}
 
@@ -51,7 +51,7 @@ public class ServiceUrlBuilderParams {
 	 */
 	public static Map<String, String> addUserKeyServiceBuilderParams(UserDetail user) {
 		Map<String, String> params = new HashMap<>();
-		params.put("username", user.getUserName());
+		params.put("username", user.getLoginId());
 		return params;
 	}
 }

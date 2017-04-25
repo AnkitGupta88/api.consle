@@ -1,5 +1,7 @@
 package com.global.console.kong.response;
 
+import java.util.List;
+
 import com.global.console.utils.DateConverter;
 
 // TODO: Auto-generated Javadoc
@@ -28,6 +30,9 @@ public class ApiService {
 
 	/** The id. */
 	private String id;
+
+	/** The api plugins. */
+	private List<ApiPlugin> apiPlugins;
 
 	/**
 	 * Gets the strip request path.
@@ -160,6 +165,25 @@ public class ApiService {
 	 */
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	/**
+	 * Gets the api plugins.
+	 *
+	 * @return the api plugins
+	 */
+	public List<ApiPlugin> getApiPlugins() {
+		return apiPlugins;
+	}
+
+	/**
+	 * Sets the api plugins.
+	 *
+	 * @param apiPlugins
+	 *            the new api plugins
+	 */
+	public void setApiPlugins(List<ApiPlugin> apiPlugins) {
+		this.apiPlugins = apiPlugins;
 	}
 
 }

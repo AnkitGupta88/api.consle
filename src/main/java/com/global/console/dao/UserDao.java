@@ -61,4 +61,5 @@ public interface UserDao {
 	 * @return the list
 	 */
 	public List<User> findAll();
+	
 }
