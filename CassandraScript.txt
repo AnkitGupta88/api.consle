@@ -1,0 +1,17 @@
+#Create KEYSPACE if not exists (Or use the KONG Keyspace)
+
+	CREATE KEYSPACE Approval WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 1};
+
+#Create a datatype WebService
+
+	create type WebService (name text, url text);
+
+#Create the table structure
+	
+	CREATE TABLE user (id text PRIMARY KEY, loginId text, firstName text, lastName text, emailId text, phoneNo text, key text, role text, webServices List<frozen<WebService>>)
+	CREATE TABLE WebServiceRequests (id UUID PRIMARY KEY, serviceName text, userId text, planId text, status text);
+	CREATE TABLE Plan (planId UUID PRIMARY KEY, planName text, createdBy text, createdOn text, configType text, configQuantity number);
+
+#Create Index on planName
+
+	CREATE INDEX planPlanName ON plan (planName);

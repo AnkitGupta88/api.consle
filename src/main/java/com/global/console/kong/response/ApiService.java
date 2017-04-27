@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.global.console.utils.DateConverter;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ApiService.
  */
@@ -33,6 +32,28 @@ public class ApiService {
 
 	/** The api plugins. */
 	private List<ApiPlugin> apiPlugins;
+
+	/** The consumer id. */
+	private String consumer_id;
+
+	/**
+	 * Gets the consumer id.
+	 *
+	 * @return the consumer id
+	 */
+	public String getConsumer_id() {
+		return consumer_id;
+	}
+
+	/**
+	 * Sets the consumer id.
+	 *
+	 * @param consumer_id
+	 *            the new consumer id
+	 */
+	public void setConsumer_id(String consumer_id) {
+		this.consumer_id = consumer_id;
+	}
 
 	/**
 	 * Gets the strip request path.
